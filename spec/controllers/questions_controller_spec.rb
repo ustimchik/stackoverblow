@@ -16,4 +16,18 @@ RSpec.describe QuestionsController, type: :controller do
     end
   end
 
+  describe 'GET #show' do
+    let (:question_test) { create(:question) }
+
+    before { get :show, params: {id: question_test} }
+
+    it 'loads the resource with specified id from params' do
+      expect(assigns(:question)).to eq question_test
+    end
+
+    it 'renders show view' do
+      expect(response).to render_template :show
+    end
+  end
+
 end
