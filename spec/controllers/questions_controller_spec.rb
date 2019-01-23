@@ -54,4 +54,27 @@ RSpec.describe QuestionsController, type: :controller do
     end
   end
 
+  describe 'POST #create' do
+    context 'valid attributes' do
+
+      it 'creates a new Question object' do
+        expect { post :create, params: { question: attributes_for(:question) } }.to change(Question, :count).by(1)
+      end
+
+      it 'redirects to show question with specified ID' do
+        post :create, params: { question: attributes_for(:question) }
+        expect(response).to redirect_to assigns(:question)
+      end
+    end
+    context 'invalid attributes' do
+      it 'does not create a new Question object' do
+        expect { post :create, params: { question: attributes_for(:question, :invalid) } }.to_not change(Question, :count)
+      end
+      it 'renders new view' do
+        post :create, params: { question: attributes_for(:question, :invalid) }
+        expect(response).to render_template :new
+      end
+    end
+  end
+
 end
