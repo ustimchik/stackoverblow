@@ -3,10 +3,9 @@ require 'rails_helper'
 RSpec.describe AnswersController, type: :controller do
 
   let (:answer_test) { create(:answer) }
-
+  let (:question) { create(:question_with_answers, answers_count: 3) }
+  
   describe 'GET #index' do
-    let (:question) { create(:question_with_answers, answers_count: 15) }
-
     before { get :index, params: {question_id: question} }
 
     it 'populates an array of all answers for a given question' do
@@ -19,7 +18,6 @@ RSpec.describe AnswersController, type: :controller do
   end
 
   describe 'GET #show' do
-
     before { get :show, params: {id: answer_test} }
 
     it 'assigns answer with id from params to @answer' do
@@ -31,4 +29,15 @@ RSpec.describe AnswersController, type: :controller do
     end
   end
 
+  describe 'GET #new' do
+    before { get :new, params: {question_id: question} }
+
+    it 'creates a new answer and assigns to @answer' do
+      expect(assigns(:answer)).to be_a_new(Answer)
+    end
+
+    it 'renders new view' do
+      expect(response).to render_template :new
+    end
+  end
 end
