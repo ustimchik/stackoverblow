@@ -2,6 +2,8 @@ require 'rails_helper'
 
 RSpec.describe AnswersController, type: :controller do
 
+  let (:answer_test) { create(:answer) }
+
   describe 'GET #index' do
     let (:question) { create(:question_with_answers, answers_count: 15) }
 
@@ -13,6 +15,19 @@ RSpec.describe AnswersController, type: :controller do
 
     it 'renders index view' do
       expect(response).to render_template :index
+    end
+  end
+
+  describe 'GET #show' do
+
+    before { get :show, params: {id: answer_test} }
+
+    it 'assigns answer with id from params to @answer' do
+      expect(assigns(:answer)).to eq answer_test
+    end
+
+    it 'renders show view' do
+      expect(response).to render_template :show
     end
   end
 
