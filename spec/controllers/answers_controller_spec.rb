@@ -4,7 +4,7 @@ RSpec.describe AnswersController, type: :controller do
 
   let (:answer_test) { create(:answer) }
   let (:question) { create(:question_with_answers, answers_count: 3) }
-  
+
   describe 'GET #index' do
     before { get :index, params: {question_id: question} }
 
@@ -38,6 +38,19 @@ RSpec.describe AnswersController, type: :controller do
 
     it 'renders new view' do
       expect(response).to render_template :new
+    end
+  end
+
+  describe 'GET #edit' do
+
+    before { get :edit, params: {id: answer_test} }
+
+    it 'assigns answer with id from params to @answer' do
+      expect(assigns(:answer)).to eq answer_test
+    end
+
+    it 'renders edit view' do
+      expect(response).to render_template :edit
     end
   end
 end

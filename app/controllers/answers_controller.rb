@@ -1,7 +1,7 @@
 class AnswersController < ApplicationController
 
   before_action :set_question, only: [:index, :new]
-  before_action :set_answer, only: [:show]
+  before_action :set_answer, only: [:show, :edit]
 
   def index
     @answers = Answer.where(question_id: @question)
@@ -12,6 +12,9 @@ class AnswersController < ApplicationController
 
   def new
     @answer = Answer.new
+  end
+
+  def edit
   end
 
   private
