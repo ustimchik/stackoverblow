@@ -124,4 +124,21 @@ RSpec.describe AnswersController, type: :controller do
     end
   end
 
+  describe 'DELETE #destroy' do
+    let!(:question) { create(:question_with_answers, answers_count: 1) }
+    let(:delete_answer) {delete :destroy, params: { id: question.answers.first}}
+
+    it 'assigns question to @question before deletion for future redirect' do
+      delete_answer
+      expect(assigns(:question)).to eq question
+    end
+
+    it 'deletes the answer from the database' do
+      expect {delete_answer}.to change(Answer, :count).by(-1)
+    end
+
+    it 'redirects to previously stored @question' do
+      expect(delete_answer).to redirect_to question
+    end
+  end
 end

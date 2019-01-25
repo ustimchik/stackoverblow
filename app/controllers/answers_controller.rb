@@ -1,7 +1,7 @@
 class AnswersController < ApplicationController
 
   before_action :set_question, only: [:index, :new, :create]
-  before_action :set_answer, only: [:show, :edit, :update]
+  before_action :set_answer, only: [:show, :edit, :update, :destroy]
 
   def index
     @answers = Answer.where(question_id: @question)
@@ -33,6 +33,12 @@ class AnswersController < ApplicationController
     else
       render :edit
     end
+  end
+
+  def destroy
+    @question = @answer.question
+    @answer.destroy
+    redirect_to @question, notice: "answer has been successfully destroyed"
   end
 
   private
