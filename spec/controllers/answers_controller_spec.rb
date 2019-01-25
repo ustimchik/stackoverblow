@@ -74,7 +74,7 @@ RSpec.describe AnswersController, type: :controller do
         expect(response).to redirect_to assigns(:answer)
       end
     end
-    
+
     context 'invalid attributes' do
       it 'does not create a new Answer object for a given Question' do
         expect { post :create, params: { question_id: question, answer: attributes_for(:answer, :invalid)} }.to_not change(question.answers, :count)
@@ -86,6 +86,42 @@ RSpec.describe AnswersController, type: :controller do
     end
   end
 
+  describe 'PATCH #update' do
+    context 'with valid attributes' do
 
+      it 'assigns the requested answer to @answer' do
+        patch :update, params: { id: answer_test, answer: attributes_for(:answer) }
+        expect(assigns(:answer)).to eq answer_test
+      end
+
+      it 'changes answer attributes' do
+        patch :update, params: { id: answer_test, answer: { title: 'test title', body: 'test body' } }
+        answer_test.reload
+
+        expect(answer_test.title).to eq 'test title'
+        expect(answer_test.body).to eq 'test body'
+      end
+
+      it 'redirects to updated answer' do
+        patch :update, params: { id: answer_test, answer: attributes_for(:answer) }
+        expect(response).to redirect_to answer_test
+      end
+    end
+
+    context 'with invalid attributes' do
+      before { patch :update, params: { id: answer_test, answer: attributes_for(:answer, :invalid) } }
+
+      it 'does not change answer' do
+        answer_test.reload
+
+        expect(answer_test.title).to eq 'MyString'
+        expect(answer_test.body).to eq 'MyText'
+      end
+
+      it 're-renders edit view' do
+        expect(response).to render_template :edit
+      end
+    end
+  end
 
 end

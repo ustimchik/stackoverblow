@@ -1,7 +1,7 @@
 class AnswersController < ApplicationController
 
   before_action :set_question, only: [:index, :new, :create]
-  before_action :set_answer, only: [:show, :edit]
+  before_action :set_answer, only: [:show, :edit, :update]
 
   def index
     @answers = Answer.where(question_id: @question)
@@ -24,6 +24,14 @@ class AnswersController < ApplicationController
       redirect_to @answer, notice: "answer created"
     else
       render :new
+    end
+  end
+
+  def update
+    if @answer.update(answer_params)
+      redirect_to @answer, notice: "answer updated"
+    else
+      render :edit
     end
   end
 
