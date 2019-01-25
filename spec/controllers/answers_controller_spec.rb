@@ -30,10 +30,18 @@ RSpec.describe AnswersController, type: :controller do
   end
 
   describe 'GET #new' do
-    before { get :new, params: {question_id: question} }
+    before { get :new, params: { answer: attributes_for(:answer), question_id: question } }
 
     it 'creates a new answer and assigns to @answer' do
       expect(assigns(:answer)).to be_a_new(Answer)
+    end
+
+    it 'assigns question to @question' do
+      expect(assigns(:question)).to eq question
+    end
+
+    it 'has an association with the @question' do
+      expect(assigns(:answer).question).to eq question
     end
 
     it 'renders new view' do
@@ -53,4 +61,31 @@ RSpec.describe AnswersController, type: :controller do
       expect(response).to render_template :edit
     end
   end
+
+  describe 'POST #create' do
+    context 'valid attributes' do
+
+      it 'creates a new Answer object for a given Question' do
+        expect { post :create, params: { question_id: question, answer: attributes_for(:answer)} }.to change(question.answers, :count).by(1)
+      end
+
+      it 'redirects to show answer with specified ID' do
+        post :create, params: { answer: attributes_for(:answer), question_id: question }
+        expect(response).to redirect_to assigns(:answer)
+      end
+    end
+    
+    context 'invalid attributes' do
+      it 'does not create a new Answer object for a given Question' do
+        expect { post :create, params: { question_id: question, answer: attributes_for(:answer, :invalid)} }.to_not change(question.answers, :count)
+      end
+      it 'renders new view' do
+        post :create, params: { question_id: question, answer: attributes_for(:answer, :invalid)}
+        expect(response).to render_template :new
+      end
+    end
+  end
+
+
+
 end

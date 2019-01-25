@@ -1,6 +1,6 @@
 class AnswersController < ApplicationController
 
-  before_action :set_question, only: [:index, :new]
+  before_action :set_question, only: [:index, :new, :create]
   before_action :set_answer, only: [:show, :edit]
 
   def index
@@ -11,10 +11,20 @@ class AnswersController < ApplicationController
   end
 
   def new
-    @answer = Answer.new
+    @answer = @question.answers.new(answer_params)
   end
 
   def edit
+  end
+
+  def create
+    @answer = @question.answers.new(answer_params)
+
+    if @answer.save
+      redirect_to @answer, notice: "answer created"
+    else
+      render :new
+    end
   end
 
   private
