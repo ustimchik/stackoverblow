@@ -4,7 +4,7 @@ class AnswersController < ApplicationController
   before_action :set_answer, only: [:show, :edit, :update, :destroy]
 
   def index
-    @answers = Answer.where(question_id: @question)
+    @answers = @question.answers
   end
 
   def show
@@ -52,6 +52,6 @@ class AnswersController < ApplicationController
   end
 
   def answer_params
-    params.require(:answer).permit(:title, :body, :question_id)
+    params.require(:answer).permit(:title, :body)
   end
 end
