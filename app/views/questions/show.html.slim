@@ -1,2 +1,5 @@
 h1= @question.title
 p= @question.body
+p= @question.id
+
+= render 'answers/form', resource: @answer
