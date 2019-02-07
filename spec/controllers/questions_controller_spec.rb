@@ -105,8 +105,8 @@ RSpec.describe QuestionsController, type: :controller do
       it 'does not change question' do
         question_test.reload
 
-        expect(question_test.title).to eq 'MyString'
-        expect(question_test.body).to eq 'MyText'
+        expect(question_test.title).to eq 'Question title'
+        expect(question_test.body).to eq 'Question body'
       end
 
       it 're-renders edit view' do

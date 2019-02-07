@@ -1,5 +1,7 @@
 h1= @question.title
 p= @question.body
-p= @question.id
+
+- @question.answers.each do |answer|
+  = render 'answers/answer', answer: answer
 
 = render 'answers/form', resource: @answer

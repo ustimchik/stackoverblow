@@ -23,6 +23,8 @@ feature 'User can create question', %q{
 
   scenario 'User asks a question with errors' do
     click_on 'Ask'
+    expect(page).to have_field 'Title'
+    expect(page).to have_field 'Body'
     expect(page).to have_content "Title can't be blank"
   end
 
