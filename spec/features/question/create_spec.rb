@@ -6,26 +6,42 @@ feature 'User can create question', %q{
   I'd like to be able to ask the question
 } do
 
-  background do
-    visit questions_path
-    click_on 'Ask question'
+  given(:user) { User.create!(email: 'user@test.com', password: '12345678') }
+
+  context 'Authenticated user' do
+    background do
+      visit new_user_session_path
+      fill_in 'Email', with: user.email
+      fill_in 'Password', with: user.password
+      click_on 'Log in'
+      visit questions_path
+      click_on 'Ask question'
+    end
+
+    scenario 'asks a question' do
+      fill_in 'Title', with: 'Test question'
+      fill_in 'Body', with: 'Text of the question'
+      click_on 'Ask'
+      expect(page).to have_content 'question created'
+      expect(page).to have_content 'Test question'
+      expect(page).to have_content 'Text of the question'
+    end
+
+    scenario 'asks a question with errors' do
+      click_on 'Ask'
+      expect(page).to have_field 'Title'
+      expect(page).to have_field 'Body'
+      expect(page).to have_content "Title can't be blank"
+      expect(page).to have_content "Body can't be blank"
+    end
   end
 
-  scenario 'User asks a question' do
+  context 'Unauthenticated user' do
 
-    fill_in 'Title', with: 'Test question'
-    fill_in 'Body', with: 'Text of the question'
-    click_on 'Ask'
-    expect(page).to have_content 'question created'
-    expect(page).to have_content 'Test question'
-    expect(page).to have_content 'Text of the question'
+    scenario 'asks a question' do
+      visit questions_path
+      click_on 'Ask question'
+      expect(page).to have_content "You need to sign in or sign up before continuing."
+    end
   end
-
-  scenario 'User asks a question with errors' do
-    click_on 'Ask'
-    expect(page).to have_field 'Title'
-    expect(page).to have_field 'Body'
-    expect(page).to have_content "Title can't be blank"
-  end
-
 end
