@@ -118,13 +118,14 @@ RSpec.describe AnswersController, type: :controller do
     end
 
     context 'with invalid attributes' do
+      let!(:answer_saved) { answer_test.dup }
       before { patch :update, params: { id: answer_test, answer: attributes_for(:answer, :invalid) } }
 
       it 'does not change answer' do
         answer_test.reload
 
-        expect(answer_test.title).to eq 'MyString'
-        expect(answer_test.body).to eq 'MyText'
+        expect(answer_test.title).to eq answer_saved.title
+        expect(answer_test.body).to eq answer_saved.body
       end
 
       it 're-renders edit view' do
@@ -136,20 +137,35 @@ RSpec.describe AnswersController, type: :controller do
   describe 'DELETE #destroy' do
     before { login(user) }
 
-    let!(:question) { create(:question_with_answers, answers_count: 1) }
-    let(:delete_answer) {delete :destroy, params: { id: question.answers.first}}
+    let!(:question) { create(:question_with_answers, answers_count: 1)}
+    let(:answer) { question.answers.first }
+    let(:delete_answer) {delete :destroy, params: { id: answer}}
 
-    it 'assigns question to @question before deletion for future redirect' do
-      delete_answer
-      expect(assigns(:question)).to eq question
+    context 'as answer owner' do
+
+      before do
+        answer.user_id = user.id
+        answer.save!
+      end
+
+      it 'assigns question to @question before deletion for future redirect' do
+        delete_answer
+        expect(assigns(:question)).to eq question
+      end
+
+      it 'deletes the answer from the database' do
+        expect {delete_answer}.to change(Answer, :count).by(-1)
+      end
+
+      it 'redirects to previously stored @question' do
+        expect(delete_answer).to redirect_to question
+      end
     end
 
-    it 'deletes the answer from the database' do
-      expect {delete_answer}.to change(Answer, :count).by(-1)
-    end
-
-    it 'redirects to previously stored @question' do
-      expect(delete_answer).to redirect_to question
+    context 'as NOT answer owner' do
+      it 'does not delete the answer from the database' do
+        expect {delete_answer}.to_not change(Answer, :count)
+      end
     end
   end
 end

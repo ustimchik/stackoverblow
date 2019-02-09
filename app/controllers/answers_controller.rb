@@ -19,7 +19,8 @@ class AnswersController < ApplicationController
   end
 
   def create
-    @answer = @question.answers.new(answer_params)
+    @answer = current_user.answers.create(answer_params.merge(question_id: @question.id))
+    @answer.question = @question
 
     if @answer.save
       redirect_to @answer, notice: "answer created"
@@ -37,9 +38,13 @@ class AnswersController < ApplicationController
   end
 
   def destroy
-    @question = @answer.question
-    @answer.destroy
-    redirect_to @question, notice: "answer has been successfully destroyed"
+    if current_user.author_of?(@answer)
+      @question = @answer.question
+      @answer.destroy
+      redirect_to @question, notice: "answer deleted"
+    else
+      flash[:notice] = "You cannot delete answers of other users"
+    end
   end
 
   private

@@ -1,7 +1,8 @@
 h1= @question.title
 p= @question.body
 
-= link_to 'Delete', @question, method: :delete, data: { confirm: 'Are you sure?' }
+- if current_user.present? && current_user.author_of?(@question)
+  = link_to 'Delete', @question, method: :delete
 
 - @question.answers.each do |answer|
   = render 'answers/answer', answer: answer
