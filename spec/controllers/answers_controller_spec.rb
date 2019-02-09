@@ -4,6 +4,8 @@ RSpec.describe AnswersController, type: :controller do
 
   let (:answer_test) { create(:answer) }
   let (:question) { create(:question_with_answers, answers_count: 3) }
+  let (:user) {create(:user)}
+
 
   describe 'GET #index' do
     before { get :index, params: {question_id: question} }
@@ -30,6 +32,8 @@ RSpec.describe AnswersController, type: :controller do
   end
 
   describe 'GET #new' do
+    before { login(user) }
+
     before { get :new, params: { answer: attributes_for(:answer), question_id: question } }
 
     it 'creates a new answer and assigns to @answer' do
@@ -50,6 +54,7 @@ RSpec.describe AnswersController, type: :controller do
   end
 
   describe 'GET #edit' do
+    before { login(user) }
 
     before { get :edit, params: {id: answer_test} }
 
@@ -63,6 +68,8 @@ RSpec.describe AnswersController, type: :controller do
   end
 
   describe 'POST #create' do
+    before { login(user) }
+
     context 'valid attributes' do
 
       it 'creates a new Answer object for a given Question' do
@@ -87,6 +94,8 @@ RSpec.describe AnswersController, type: :controller do
   end
 
   describe 'PATCH #update' do
+    before { login(user) }
+
     context 'with valid attributes' do
 
       it 'assigns the requested answer to @answer' do
@@ -125,6 +134,8 @@ RSpec.describe AnswersController, type: :controller do
   end
 
   describe 'DELETE #destroy' do
+    before { login(user) }
+
     let!(:question) { create(:question_with_answers, answers_count: 1) }
     let(:delete_answer) {delete :destroy, params: { id: question.answers.first}}
 
