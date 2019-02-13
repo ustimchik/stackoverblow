@@ -1,4 +1,3 @@
-h1= answer.title
 p= answer.body
 - if current_user.present? && current_user.author_of?(answer)
   = link_to 'Delete', answer, remote: true, method: :delete

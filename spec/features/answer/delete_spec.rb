@@ -6,27 +6,23 @@ feature 'User can delete answer', %q{
   I'd like to be able to delete my answer
 } do
 
-  given(:user) {create(:user)}
-  given!(:question) { create(:question_with_answers, answers_count: 2) }
-  given(:myanswer) { question.answers.first }
-  given(:someanswer) { question.answers.second }
-
-  background do
-    sign_in(user)
-    myanswer.user = user
-    myanswer.save!
-  end
+  given(:user) { create(:user) }
+  given(:wrong_user) { create(:user) }
+  given(:question) { create(:question) }
+  given!(:answer) { create(:answer, user: user, question: question) }
 
   scenario 'Authenticated user deletes his answer' do
-    visit answer_path(myanswer)
+    answer_content = question.answers.first.body
+    sign_in(user)
+    visit question_path(question)
     click_on 'Delete'
-    expect(page).to have_no_content(myanswer.title)
-    expect(page).to have_no_content(myanswer.body)
+    expect(page).to have_no_content(answer_content)
     expect(page).to have_content 'answer deleted'
   end
 
   scenario 'Other users not able to see delete option' do
-    visit answer_path(someanswer)
+    sign_in(wrong_user)
+    visit question_path(question)
     expect(page).to have_no_content('Delete')
   end
 end

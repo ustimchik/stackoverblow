@@ -62,8 +62,12 @@ RSpec.describe QuestionsController, type: :controller do
 
     context 'valid attributes' do
 
-      it 'creates a new Question object' do
+      it 'saves a new question object' do
         expect { post :create, params: { question: attributes_for(:question) } }.to change(Question, :count).by(1)
+      end
+
+      it 'saves a new question object with valid user id' do
+        expect { post :create, params: { question: attributes_for(:question) } }.to change(user.questions, :count).by(1)
       end
 
       it 'redirects to show question with specified ID' do

@@ -1,15 +1,8 @@
 class AnswersController < ApplicationController
 
-  before_action :authenticate_user!, except: [:index, :show]
-  before_action :set_question, only: [:index, :new, :create]
-  before_action :set_answer, only: [:show, :edit, :update, :destroy]
-
-  def index
-    @answers = @question.answers
-  end
-
-  def show
-  end
+  before_action :authenticate_user!
+  before_action :set_question, only: [:new, :create]
+  before_action :set_answer, only: [:edit, :update, :destroy]
 
   def new
     @answer = @question.answers.new(answer_params)
@@ -19,19 +12,19 @@ class AnswersController < ApplicationController
   end
 
   def create
-    @answer = current_user.answers.create(answer_params.merge(question_id: @question.id))
+    @answer = current_user.answers.create(answer_params)
     @answer.question = @question
 
     if @answer.save
-      redirect_to @answer, notice: "answer created"
+      redirect_to @question, notice: "answer created"
     else
-      render :new
+      render @answer.question
     end
   end
 
   def update
     if @answer.update(answer_params)
-      redirect_to @answer, notice: "answer updated"
+      redirect_to @answer.question, notice: "answer updated"
     else
       render :edit
     end

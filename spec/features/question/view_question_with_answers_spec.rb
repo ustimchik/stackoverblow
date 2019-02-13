@@ -10,9 +10,6 @@ feature 'User can view question with associated answers', %q{
   scenario 'Any user is able to view question with answers' do
 
     visit question_path(question)
-    question.answers.each do |answer|
-      expect(page).to have_content answer.title
-      expect(page).to have_content answer.body
-    end
+    question.answers.each {|answer| expect(page).to have_content answer.body}
   end
 end
