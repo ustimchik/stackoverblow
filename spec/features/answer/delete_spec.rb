@@ -20,8 +20,13 @@ feature 'User can delete answer', %q{
     expect(page).to have_content 'answer deleted'
   end
 
-  scenario 'Other users not able to see delete option' do
+  scenario 'Other authenticated user not able to see delete option' do
     sign_in(wrong_user)
+    visit question_path(question)
+    expect(page).to have_no_content('Delete')
+  end
+
+  scenario 'Non-authenticated user not able to see delete option' do
     visit question_path(question)
     expect(page).to have_no_content('Delete')
   end
