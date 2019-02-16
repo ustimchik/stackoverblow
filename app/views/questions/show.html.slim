@@ -5,4 +5,4 @@ p= @question.body
   = link_to 'Delete', @question, method: :delete
 
 = render @question.answers
-= render 'answers/form', resource: @answer
+= render 'answers/form'

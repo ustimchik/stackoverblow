@@ -62,10 +62,6 @@ RSpec.describe QuestionsController, type: :controller do
 
     context 'valid attributes' do
 
-      it 'saves a new question object' do
-        expect { post :create, params: { question: attributes_for(:question) } }.to change(Question, :count).by(1)
-      end
-
       it 'saves a new question object with valid user id' do
         expect { post :create, params: { question: attributes_for(:question) } }.to change(user.questions, :count).by(1)
       end
@@ -130,22 +126,28 @@ RSpec.describe QuestionsController, type: :controller do
     before { login(user) }
 
     context 'as question owner' do
-      let!(:question_test) { create(:question, user: user) }
+      let!(:question_test) {create(:question, user: user) }
+      let(:delete_answer) {delete :destroy, params: {id: question_test}}
+
       it 'deletes the question' do
-        expect { delete :destroy, params: { id: question_test } }.to change(Question, :count).by(-1)
+        expect{delete_answer}.to change(Question, :count).by(-1)
       end
 
-      it 'redirects to index' do
-        delete :destroy, params: { id: question_test }
-        expect(response).to redirect_to questions_path
+      it 'redirects to all questions' do
+        expect(delete_answer).to redirect_to questions_path
       end
     end
 
     context 'as NOT question owner' do
-      let!(:question_test) { create(:question, user: create(:user)) }
+      let!(:question_test) {create(:question, user: create(:user)) }
+      let(:delete_answer) {delete :destroy, params: { id: question_test}}
 
       it 'does not delete the question' do
-        expect { delete :destroy, params: { id: question_test } }.to_not change(Question, :count)
+        expect{delete_answer}.to_not change(Question, :count)
+      end
+
+      it 'redirects to all questions' do
+        expect(delete_answer).to redirect_to question_test
       end
     end
   end

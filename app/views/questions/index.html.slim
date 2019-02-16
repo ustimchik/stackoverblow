@@ -1,4 +1,6 @@
 - @questions.each do |question|
-  h1= question.title
+  ul
+    li = link_to "#{question.title}", question
+
 
 p= link_to 'Ask question', new_question_path

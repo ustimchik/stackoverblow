@@ -4,12 +4,12 @@ RSpec.describe AnswersController, type: :controller do
 
   let (:answer_test) { create(:answer) }
   let (:question) { create(:question_with_answers, answers_count: 3) }
-  let (:user) {create(:user)}
+  let (:user) { create(:user) }
 
   describe 'POST #create' do
     before { login(user) }
 
-    let(:create_answer) { post :create, params: { question_id: question, answer: attributes_for(:answer)} }
+    let(:create_answer) { post :create, params: { question_id: question, answer: attributes_for(:answer) } }
 
     context 'valid attributes' do
 
@@ -55,7 +55,7 @@ RSpec.describe AnswersController, type: :controller do
         expect(answer_test.body).to eq 'test body'
       end
 
-      it 'redirects to updated answer' do
+      it 'redirects to the corresponding question' do
         patch :update, params: { id: answer_test, answer: attributes_for(:answer) }
         expect(response).to redirect_to answer_test.question
       end
@@ -85,9 +85,7 @@ RSpec.describe AnswersController, type: :controller do
 
     context 'as answer owner' do
 
-      before do
-        answer.update(user: user)
-      end
+      before {answer.update(user: user)}
 
       it 'assigns question to @question before deletion for future redirect' do
         delete_answer
@@ -106,6 +104,10 @@ RSpec.describe AnswersController, type: :controller do
     context 'as NOT answer owner' do
       it 'does not delete the answer from the database' do
         expect{delete_answer}.to_not change(Answer, :count)
+      end
+
+      it 'redirects to previously stored @question' do
+        expect(delete_answer).to redirect_to question
       end
     end
   end
