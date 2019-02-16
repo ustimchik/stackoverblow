@@ -4,13 +4,6 @@ class AnswersController < ApplicationController
   before_action :set_question, only: [:new, :create]
   before_action :set_answer, only: [:edit, :update, :destroy]
 
-  def new
-    @answer = @question.answers.new(answer_params)
-  end
-
-  def edit
-  end
-
   def create
     @answer = current_user.answers.create(answer_params)
     @answer.question = @question
@@ -18,7 +11,7 @@ class AnswersController < ApplicationController
     if @answer.save
       redirect_to @question, notice: "answer created"
     else
-      render @answer.question
+      render 'questions/show'
     end
   end
 
@@ -31,12 +24,13 @@ class AnswersController < ApplicationController
   end
 
   def destroy
+    @question = @answer.question
+
     if current_user.author_of?(@answer)
-      @question = @answer.question
       @answer.destroy
       redirect_to @question, notice: "answer deleted"
     else
-      flash[:notice] = "You cannot delete answers of other users"
+      redirect_to @question, notice: "You cannot delete answers of other users"
     end
   end
 

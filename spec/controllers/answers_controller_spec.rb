@@ -6,42 +6,6 @@ RSpec.describe AnswersController, type: :controller do
   let (:question) { create(:question_with_answers, answers_count: 3) }
   let (:user) {create(:user)}
 
-  describe 'GET #new' do
-    before { login(user) }
-
-    before { get :new, params: { answer: attributes_for(:answer), question_id: question } }
-
-    it 'creates a new answer and assigns to @answer' do
-      expect(assigns(:answer)).to be_a_new(Answer)
-    end
-
-    it 'assigns question to @question' do
-      expect(assigns(:question)).to eq question
-    end
-
-    it 'has an association with the @question' do
-      expect(assigns(:answer).question).to eq question
-    end
-
-    it 'renders new view' do
-      expect(response).to render_template :new
-    end
-  end
-
-  describe 'GET #edit' do
-    before { login(user) }
-
-    before { get :edit, params: {id: answer_test} }
-
-    it 'assigns answer with id from params to @answer' do
-      expect(assigns(:answer)).to eq answer_test
-    end
-
-    it 'renders edit view' do
-      expect(response).to render_template :edit
-    end
-  end
-
   describe 'POST #create' do
     before { login(user) }
 
@@ -69,7 +33,7 @@ RSpec.describe AnswersController, type: :controller do
       end
       it 'renders new view' do
         post :create, params: { question_id: question, answer: attributes_for(:answer, :invalid)}
-        expect(response).to render_template(partial: 'questions/_question')
+        expect(response).to render_template 'questions/show'
       end
     end
   end
@@ -131,7 +95,7 @@ RSpec.describe AnswersController, type: :controller do
       end
 
       it 'deletes the answer from the database' do
-        expect {delete_answer}.to change(Answer, :count).by(-1)
+        expect{delete_answer}.to change(Answer, :count).by(-1)
       end
 
       it 'redirects to previously stored @question' do
@@ -141,7 +105,7 @@ RSpec.describe AnswersController, type: :controller do
 
     context 'as NOT answer owner' do
       it 'does not delete the answer from the database' do
-        expect {delete_answer}.to_not change(Answer, :count)
+        expect{delete_answer}.to_not change(Answer, :count)
       end
     end
   end

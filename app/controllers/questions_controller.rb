@@ -40,7 +40,7 @@ class QuestionsController < ApplicationController
       @question.destroy
       redirect_to questions_path, notice: "question deleted"
     else
-      flash[:notice] = "You cannot delete questions of other users"
+      redirect_to @question, notice: "You cannot delete questions of other users"
     end
   end
 
