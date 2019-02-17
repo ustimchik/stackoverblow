@@ -11,7 +11,7 @@ feature 'User can view all questions', %q{
 
     visit questions_path
     questions.each do |q|
-      expect(page).to have_content q.title
+      expect(page).to have_link q.title
     end
   end
 end

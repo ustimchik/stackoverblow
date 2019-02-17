@@ -87,11 +87,6 @@ RSpec.describe AnswersController, type: :controller do
 
       before {answer.update(user: user)}
 
-      it 'assigns question to @question before deletion for future redirect' do
-        delete_answer
-        expect(assigns(:question)).to eq question
-      end
-
       it 'deletes the answer from the database' do
         expect{delete_answer}.to change(Answer, :count).by(-1)
       end

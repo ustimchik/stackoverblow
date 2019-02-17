@@ -22,11 +22,11 @@ feature 'User can delete question', %q{
   scenario "Other authenticated user is not able to see delete option for someone's question" do
     sign_in(wrong_user)
     visit question_path(question)
-    expect(page).to have_no_content('Delete')
+    expect(page).to have_no_link('Delete')
   end
 
   scenario 'Non-authenticated user is not able to see delete option' do
     visit question_path(question)
-    expect(page).to have_no_content('Delete')
+    expect(page).to have_no_link('Delete')
   end
 end
