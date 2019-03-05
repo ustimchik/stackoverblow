@@ -16,15 +16,18 @@ feature 'User can create answer', %q{
       visit question_path(question)
     end
 
-    scenario 'User answers the question' do
+    scenario 'User creates answer OK', js: true do
 
       fill_in 'Body', with: 'Text of the answer'
       click_on 'Answer'
+      expect(current_path).to eq question_path(question)
       expect(page).to have_content 'answer created'
-      expect(page).to have_content 'Text of the answer'
+      within '.answers' do
+        expect(page).to have_content 'Text of the answer'
+      end
     end
 
-    scenario 'User answers the question with errors' do
+    scenario 'User creates answer with errors', js: true do
       click_on 'Answer'
       expect(page).to have_field 'Body'
       expect(page).to_not have_content "Text of the answer"

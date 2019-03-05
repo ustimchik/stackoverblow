@@ -4,5 +4,9 @@ p= @question.body
 - if current_user&.author_of?(@question)
   = link_to 'Delete', @question, method: :delete
 
-= render @question.answers
+.answers
+  = render @question.answers
+
+.answer-errors
+  = render 'shared/errors', resource: @answer
 = render 'answers/form'
