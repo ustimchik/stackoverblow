@@ -9,7 +9,7 @@ RSpec.describe AnswersController, type: :controller do
   describe 'POST #create' do
     before { login(user) }
 
-    let(:create_answer) { post :create, params: { question_id: question, answer: attributes_for(:answer) } }
+    let(:create_answer) { post :create, params: { question_id: question, answer: attributes_for(:answer) }, format: :js }
 
     context 'valid attributes' do
 
@@ -21,9 +21,9 @@ RSpec.describe AnswersController, type: :controller do
         expect { create_answer }.to change(user.answers, :count).by(1)
       end
 
-      it 'redirects to show answer with specified ID' do
-        post :create, params: { answer: attributes_for(:answer), question_id: question }
-        expect(response).to redirect_to assigns(:question)
+      it 'renders create-js' do
+        post :create, params: { answer: attributes_for(:answer), question_id: question }, format: :js
+        expect(response).to render_template :create
       end
     end
 
@@ -31,7 +31,7 @@ RSpec.describe AnswersController, type: :controller do
       it 'does not create a new Answer object for a given Question' do
         expect { post :create, params: { question_id: question, answer: attributes_for(:answer, :invalid)}, format: :js }.to_not change(question.answers, :count)
       end
-      it 'renders new view' do
+      it 'renders create-js' do
         post :create, params: { question_id: question, answer: attributes_for(:answer, :invalid)}, format: :js
         expect(response).to render_template :create
       end

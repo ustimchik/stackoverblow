@@ -5,12 +5,7 @@ class AnswersController < ApplicationController
   before_action :set_answer, only: [:edit, :update, :destroy]
 
   def create
-    @answer = current_user.answers.create(answer_params)
-    @answer.question = @question
-
-    if @answer.save
-      redirect_to @question, notice: "answer created"
-    end
+    @answer = current_user.answers.create(answer_params.merge(question: @question))
   end
 
   def update

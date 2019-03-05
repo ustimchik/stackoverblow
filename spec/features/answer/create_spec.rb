@@ -21,7 +21,6 @@ feature 'User can create answer', %q{
       fill_in 'Body', with: 'Text of the answer'
       click_on 'Answer'
       expect(current_path).to eq question_path(question)
-      expect(page).to have_content 'answer created'
       within '.answers' do
         expect(page).to have_content 'Text of the answer'
       end
@@ -30,8 +29,10 @@ feature 'User can create answer', %q{
     scenario 'User creates answer with errors', js: true do
       click_on 'Answer'
       expect(page).to have_field 'Body'
-      expect(page).to_not have_content "Text of the answer"
-      expect(page).to have_content "Body can't be blank"
+      expect(page).to_not have_content 'Text of the answer'
+      within '.answer-errors' do
+        expect(page).to have_content "Body can't be blank"
+      end
     end
   end
 
