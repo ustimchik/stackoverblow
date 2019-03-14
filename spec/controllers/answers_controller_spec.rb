@@ -44,34 +44,34 @@ RSpec.describe AnswersController, type: :controller do
     context 'with valid attributes' do
 
       it 'assigns the requested answer to @answer' do
-        patch :update, params: { id: answer_test, answer: attributes_for(:answer) }
+        patch :update, params: { id: answer_test, answer: attributes_for(:answer)}, format: :js
         expect(assigns(:answer)).to eq answer_test
       end
 
       it 'changes answer attributes' do
-        patch :update, params: { id: answer_test, answer: { body: 'test body' } }
+        patch :update, params: { id: answer_test, answer: { body: 'test body' }}, format: :js
         answer_test.reload
 
         expect(answer_test.body).to eq 'test body'
       end
 
-      it 'redirects to the corresponding question' do
-        patch :update, params: { id: answer_test, answer: attributes_for(:answer) }
-        expect(response).to redirect_to answer_test.question
+      it 'renders update-js' do
+        patch :update, params: { id: answer_test, answer: attributes_for(:answer)}, format: :js
+        expect(response).to render_template :update
       end
     end
 
     context 'with invalid attributes' do
       let!(:answer_saved) { answer_test.dup }
-      before { patch :update, params: { id: answer_test, answer: attributes_for(:answer, :invalid) } }
+      before { patch :update, params: { id: answer_test, answer: attributes_for(:answer, :invalid)}, format: :js  }
 
       it 'does not change answer' do
         answer_test.reload
         expect(answer_test.body).to eq answer_saved.body
       end
 
-      it 're-renders edit view' do
-        expect(response).to render_template :edit
+      it 'renders update-js' do
+        expect(response).to render_template :update
       end
     end
   end
