@@ -81,7 +81,7 @@ RSpec.describe AnswersController, type: :controller do
 
     let!(:question) { create(:question_with_answers, answers_count: 1)}
     let(:answer) { question.answers.first }
-    let(:delete_answer) {delete :destroy, params: { id: answer}}
+    let(:delete_answer) {delete :destroy, params: { id: answer}, format: :js}
 
     context 'as answer owner' do
 
@@ -92,7 +92,7 @@ RSpec.describe AnswersController, type: :controller do
       end
 
       it 'redirects to previously stored @question' do
-        expect(delete_answer).to redirect_to question
+        expect(delete_answer).to render_template :destroy
       end
     end
 
@@ -102,7 +102,7 @@ RSpec.describe AnswersController, type: :controller do
       end
 
       it 'redirects to previously stored @question' do
-        expect(delete_answer).to redirect_to question
+        expect(delete_answer).to render_template :destroy
       end
     end
   end

@@ -1,12 +1,20 @@
-h1= @question.title
-p= @question.body
+.notice
+.question
+  = render @question
+  = form_with model: @question, class: 'hidden', html: { id: "edit-question-#{@question.id}"} do |f|
+    = f.label :title
+    = f.text_field :title
+    = f.label :body
+    = f.text_area :body
+    = f.submit 'Save'
 
-- if current_user&.author_of?(@question)
-  = link_to 'Delete', @question, method: :delete
+.question-errors
+  = render 'shared/errors', resource: @question
 
 .answers
   = render @question.answers
 
 .answer-errors
   = render 'shared/errors', resource: @answer
+
 = render 'answers/form'

@@ -1,0 +1,6 @@
+h1= @question.title
+p= @question.body
+
+- if current_user&.author_of?(@question)
+  = link_to 'Edit', '#', class: 'edit-question-link', data: { question_id: @question.id }
+  = link_to 'Delete', @question, remote: true, method: :delete
