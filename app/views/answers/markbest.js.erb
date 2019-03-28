@@ -1,0 +1,6 @@
+$('.answer-errors').html('<%= render 'shared/errors', resource: @answer %>');
+<% if !@answer.errors.present? %>
+  $('.answer-best').html('<%= j render @question.best_answer %>');
+  $('.answers').html('<%= j render @question.other_answers %>');
+  $('.notice').html('<%= j 'Answer was successfully marked the best.' %>');
+<% end %>

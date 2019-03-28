@@ -1,5 +1,5 @@
 $('.answer-errors').html('<%= render 'shared/errors', resource: @answer %>');
 <% if !@answer.errors.present? %>
-  $('.answer-' + <%= @answer.id %>).remove();
+  $('#answer-' + <%= @answer.id %>).remove();
   $('.notice').html('<%= j 'Answer was successfully deleted.' %>');
 <% end %>

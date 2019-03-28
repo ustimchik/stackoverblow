@@ -11,8 +11,11 @@
 .question-errors
   = render 'shared/errors', resource: @question
 
+.answer-best
+  = render @question.best_answer
+
 .answers
-  = render @question.answers
+  = render @question.other_answers
 
 .answer-errors
   = render 'shared/errors', resource: @answer

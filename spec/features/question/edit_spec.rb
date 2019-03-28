@@ -8,6 +8,7 @@ feature 'User can edit question', %q{
 
   given!(:user) { create(:user) }
   given!(:question) { create(:question, user: user) }
+  given(:other_user) { create(:user) }
 
   scenario 'Unauthenticated user can not edit question' do
     visit questions_path(question)
@@ -31,7 +32,26 @@ feature 'User can edit question', %q{
 
       end
     end
-    scenario 'edits his question with errors'
-    scenario "tries to edit other user's question"
+    scenario 'edits his question with errors', js: true do
+      sign_in user
+      visit question_path(question)
+
+      within '.question' do
+        click_on 'Edit'
+        fill_in 'Body', with: ''
+        click_on 'Save'
+
+        expect(page).to have_content question.body
+      end
+      within '.question-errors' do
+        expect(page).to have_content "can't be blank"
+      end
+    end
+    scenario "does not have option to edit question of another user" do
+      sign_in other_user
+      visit questions_path(question)
+
+      expect(page).to_not have_link 'Edit'
+    end
   end
 end
