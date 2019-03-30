@@ -52,26 +52,44 @@ RSpec.describe AnswersController, type: :controller do
     context 'as logged on user' do
       before { login(user) }
 
-      context 'with valid attributes' do
+      context 'as answer author' do
+        before {answer_test.update(user: user)}
 
-        before { patch :update, params: { id: answer_test, answer: { body: 'test body' }}, format: :js }
+        context 'with valid attributes' do
 
-        it 'assigns the requested answer to @answer' do
-          expect(assigns(:answer)).to eq answer_test
+          before { patch :update, params: { id: answer_test, answer: { body: 'test body' }}, format: :js }
+
+          it 'assigns the requested answer to @answer' do
+            expect(assigns(:answer)).to eq answer_test
+          end
+
+          it 'changes answer attributes' do
+            answer_test.reload
+
+            expect(answer_test.body).to eq 'test body'
+          end
+
+          it 'renders update-js' do
+            expect(response).to render_template :update
+          end
         end
 
-        it 'changes answer attributes' do
-          answer_test.reload
+        context 'with invalid attributes' do
+          let!(:answer_saved) { answer_test.dup }
+          before { patch :update, params: { id: answer_test, answer: attributes_for(:answer, :invalid)}, format: :js  }
 
-          expect(answer_test.body).to eq 'test body'
-        end
+          it 'does not change answer' do
+            answer_test.reload
+            expect(answer_test.body).to eq answer_saved.body
+          end
 
-        it 'renders update-js' do
-          expect(response).to render_template :update
+          it 'renders update-js' do
+            expect(response).to render_template :update
+          end
         end
       end
 
-      context 'with invalid attributes' do
+      context 'as NOT answer author' do
         let!(:answer_saved) { answer_test.dup }
         before { patch :update, params: { id: answer_test, answer: attributes_for(:answer, :invalid)}, format: :js  }
 
@@ -94,36 +112,51 @@ RSpec.describe AnswersController, type: :controller do
         answer_test.reload
         expect(answer_test.body).to eq answer_saved.body
       end
+
+      it 'does not render update template' do
+        expect(response).to_not render_template :update
+      end
     end
   end
 
   describe 'DELETE #destroy' do
-    before { login(user) }
-
     let!(:question) { create(:question_with_answers, answers_count: 1) }
     let(:answer) { question.answers.first }
     let(:delete_answer) { delete :destroy, params: { id: answer }, format: :js }
 
-    context 'as answer owner' do
+    context 'as logged on user' do
+      before { login(user) }
 
-      before {answer.update(user: user)}
+      context 'as answer owner' do
+        before {answer.update(user: user)}
 
-      it 'deletes the answer from the database' do
-        expect{delete_answer}.to change(Answer, :count).by(-1)
+        it 'deletes the answer from the database' do
+          expect{delete_answer}.to change(Answer, :count).by(-1)
+        end
+
+        it 'redirects to previously stored @question' do
+          expect(delete_answer).to render_template :destroy
+        end
       end
 
-      it 'redirects to previously stored @question' do
-        expect(delete_answer).to render_template :destroy
+      context 'as NOT answer owner' do
+        it 'does not delete the answer from the database' do
+          expect{delete_answer}.to_not change(Answer, :count)
+        end
+
+        it 'renders destroy template' do
+          expect(delete_answer).to render_template :destroy
+        end
       end
     end
 
-    context 'as NOT answer owner' do
+    context 'as NOT logged on user' do
       it 'does not delete the answer from the database' do
         expect{delete_answer}.to_not change(Answer, :count)
       end
 
-      it 'redirects to previously stored @question' do
-        expect(delete_answer).to render_template :destroy
+      it 'does not render destroy template' do
+        expect(delete_answer).to_not render_template :destroy
       end
     end
   end

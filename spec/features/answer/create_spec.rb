@@ -36,7 +36,7 @@ feature 'User can create answer', %q{
     end
   end
 
-  context 'Unauthenticated user' do
+  context 'Unauthenticated user', js: true do
     scenario 'asks a question' do
       visit question_path(question)
       click_on 'Answer'
