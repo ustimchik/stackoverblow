@@ -127,29 +127,48 @@ RSpec.describe QuestionsController, type: :controller do
     context 'as logged on user' do
       before { login(user) }
 
-      context 'with valid attributes' do
+      context 'as question author' do
+        before {question_test.update(user: user)}
 
-        it 'assigns the requested question to @question' do
-          patch :update, params: { id: question_test, question: attributes_for(:question) }, format: :js
-          expect(assigns(:question)).to eq question_test
+        context 'with valid attributes' do
+
+          it 'assigns the requested question to @question' do
+            patch :update, params: { id: question_test, question: attributes_for(:question) }, format: :js
+            expect(assigns(:question)).to eq question_test
+          end
+
+          it 'changes question attributes' do
+            patch :update, params: { id: question_test, question: { title: 'test title', body: 'test body' } }, format: :js
+            question_test.reload
+
+            expect(question_test.title).to eq 'test title'
+            expect(question_test.body).to eq 'test body'
+          end
+
+          it 'renders update js' do
+            patch :update, params: { id: question_test, question: attributes_for(:question) }, format: :js
+            expect(response).to render_template :update
+          end
         end
 
-        it 'changes question attributes' do
-          patch :update, params: { id: question_test, question: { title: 'test title', body: 'test body' } }, format: :js
-          question_test.reload
+        context 'with invalid attributes' do
+          before { patch :update, params: { id: question_test, question: attributes_for(:question, :invalid) }, format: :js }
 
-          expect(question_test.title).to eq 'test title'
-          expect(question_test.body).to eq 'test body'
-        end
+          it 'does not change question' do
+            question_test.reload
 
-        it 'renders update js' do
-          patch :update, params: { id: question_test, question: attributes_for(:question) }, format: :js
-          expect(response).to render_template :update
+            expect(question_test.title).to eq 'Question title'
+            expect(question_test.body).to eq 'Question body'
+          end
+
+          it 'renders update js' do
+            expect(response).to render_template :update
+          end
         end
       end
 
-      context 'with invalid attributes' do
-        before { patch :update, params: { id: question_test, question: attributes_for(:question, :invalid) }, format: :js }
+      context 'as NOT answer author' do
+        before { patch :update, params: { id: question_test, question: attributes_for(:question) }, format: :js }
 
         it 'does not change question' do
           question_test.reload
@@ -192,34 +211,19 @@ RSpec.describe QuestionsController, type: :controller do
       before { login(user) }
 
       context 'as question author' do
-      let!(:question_test) {create(:question, user: user) }
-      let(:delete_answer) {delete :destroy, params: {id: question_test}}
+        let!(:question_test) {create(:question, user: user) }
+        let(:delete_answer) {delete :destroy, params: {id: question_test}}
 
-      it 'deletes the question' do
-        expect{delete_answer}.to change(Question, :count).by(-1)
-      end
+        it 'deletes the question' do
+          expect{delete_answer}.to change(Question, :count).by(-1)
+        end
 
-      it 'redirects to all questions' do
-        expect(delete_answer).to redirect_to questions_path
-      end
+        it 'redirects to all questions' do
+          expect(delete_answer).to redirect_to questions_path
+        end
     end
 
       context 'as NOT question author' do
-      let!(:question_test) {create(:question, user: create(:user)) }
-      let(:delete_answer) {delete :destroy, params: { id: question_test}}
-
-      it 'does not delete the question' do
-        expect{delete_answer}.to_not change(Question, :count)
-      end
-
-      it 'redirects to all questions' do
-        expect(delete_answer).to redirect_to question_test
-      end
-      end
-
-      end
-
-    context 'as NOT logged on user' do
         let!(:question_test) {create(:question, user: create(:user)) }
         let(:delete_answer) {delete :destroy, params: { id: question_test}}
 
@@ -227,10 +231,25 @@ RSpec.describe QuestionsController, type: :controller do
           expect{delete_answer}.to_not change(Question, :count)
         end
 
-        it 'does not redirect to all questions' do
-          expect(delete_answer).to_not redirect_to question_test
+        it 'redirects to all questions' do
+          expect(delete_answer).to redirect_to question_test
         end
       end
+
+      end
+
+    context 'as NOT logged on user' do
+      let!(:question_test) {create(:question, user: create(:user)) }
+      let(:delete_answer) {delete :destroy, params: { id: question_test}}
+
+      it 'does not delete the question' do
+        expect{delete_answer}.to_not change(Question, :count)
+      end
+
+      it 'does not redirect to all questions' do
+        expect(delete_answer).to_not redirect_to question_test
+      end
+    end
   end
 
 end
