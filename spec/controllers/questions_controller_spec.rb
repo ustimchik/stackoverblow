@@ -167,13 +167,12 @@ RSpec.describe QuestionsController, type: :controller do
         end
       end
 
-      context 'as NOT answer author' do
+      context 'as NOT question author' do
         before { patch :update, params: { id: question_test, question: attributes_for(:question) }, format: :js }
 
         it 'does not change question' do
           question_test.reload
 
-          expect(question_test.title).to eq 'Question title'
           expect(question_test.body).to eq 'Question body'
         end
 
@@ -194,7 +193,6 @@ RSpec.describe QuestionsController, type: :controller do
         patch :update, params: { id: question_test, question: { title: 'test title', body: 'test body' } }, format: :js
         question_test.reload
 
-        expect(question_test.title).to_not eq 'test title'
         expect(question_test.body).to_not eq 'test body'
       end
 

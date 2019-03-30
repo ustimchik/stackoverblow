@@ -6,8 +6,9 @@ class Answer < ApplicationRecord
   validates :best, uniqueness: { scope: :question_id }, if: :best?
 
   def markbest
-    question.answers.update_all(best: false)
-    update!(best: true)
+    Answer.transaction do
+      question.answers.update_all(best: false)
+      update!(best: true)
+    end
   end
-
 end

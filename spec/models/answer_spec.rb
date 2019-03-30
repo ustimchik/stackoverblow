@@ -29,16 +29,30 @@ RSpec.describe Answer, type: :model do
       answer.reload
     end
 
-    it 'marks answer the only best for the first time' do
-      expect(answer.best).to be true
-      expect(question.answers.where(best: true).count).to eq(1)
+    context 'for the first time' do
+      it 'marks answer best' do
+        expect(answer).to be_best
+      end
+
+      it 'makes sure only one answer is best' do
+        expect(question.answers.where(best: true).count).to eq(1)
+      end
     end
 
-    it 'marks another answer making it the only best' do
-      second_answer.markbest
-      second_answer.reload
-      expect(second_answer.best).to be true
-      expect(question.answers.where(best: true).count).to eq(1)
+    context 'when other answer already marked as best' do
+
+      before do
+        second_answer.markbest
+        second_answer.reload
+      end
+
+      it 'marks second answer best' do
+        expect(second_answer).to be_best
+      end
+
+      it 'makes sure only one answer is best' do
+        expect(question.answers.where(best: true).count).to eq(1)
+      end
     end
   end
 end
