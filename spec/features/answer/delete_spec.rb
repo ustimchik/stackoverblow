@@ -16,7 +16,7 @@ feature 'User can delete answer', %q{
     sign_in(user)
     visit question_path(question)
     click_on 'Delete'
-    save_and_open_page
+
     expect(page).to have_no_content(answer_content)
     expect(page).to have_content 'Answer was successfully deleted.'
   end
@@ -24,11 +24,13 @@ feature 'User can delete answer', %q{
   scenario "Other authenticated user is not able to see delete option for someone's answer" do
     sign_in(wrong_user)
     visit question_path(question)
+
     expect(page).to have_no_link('Delete')
   end
 
   scenario 'Non-authenticated user is not able to see delete option' do
     visit question_path(question)
+
     expect(page).to have_no_link('Delete')
   end
 end

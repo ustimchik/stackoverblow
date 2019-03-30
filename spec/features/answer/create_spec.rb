@@ -39,8 +39,10 @@ feature 'User can create answer', %q{
   context 'Unauthenticated user', js: true do
     scenario 'asks a question' do
       visit question_path(question)
+      fill_in 'Body', with: 'Text of the answer'
       click_on 'Answer'
-      expect(page).to have_content "You need to sign in or sign up before continuing."
+      expect(page).to_not have_content 'Text of the answer'
+
     end
   end
 

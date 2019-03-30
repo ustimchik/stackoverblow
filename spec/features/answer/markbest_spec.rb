@@ -45,7 +45,6 @@ feature 'Use can mark answer best', %q{
         click_on 'Mark Best'
       end
 
-      save_and_open_page
       expect(page).to have_content 'Answer was successfully marked the best.'
       within '.answer-best' do
         expect(page).to have_content other_answer.body
