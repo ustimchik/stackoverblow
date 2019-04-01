@@ -171,57 +171,50 @@ RSpec.describe AnswersController, type: :controller do
     context 'as logged on user' do
       context 'as question owner' do
         before { login(user) }
+        before { markbest }
 
         it 'assigns the requested answer to @answer' do
-          markbest
           expect(assigns(:answer)).to eq answer_first
         end
 
         it 'assigns the @question' do
-          markbest
           expect(assigns(:question)).to eq question
         end
 
         it 'marks answer best in database' do
-          markbest
-
           answer_first.reload
-          expect(answer_first.best).to be true
+          expect(answer_first).to be_best
         end
 
         it 'renders markbest js' do
-          markbest
           expect(response).to render_template :markbest
         end
       end
 
       context 'as NOT question owner' do
         before { login(other_user) }
+        before { markbest }
 
         it 'does not mark answer best in database' do
-          markbest
-
           answer_first.reload
           expect(answer_first.best).to be_falsey
         end
 
         it 'renders markbest js' do
-          markbest
           expect(response).to render_template :markbest
         end
       end
     end
 
     context 'as NOT logged on user' do
-      it 'does not mark answer best in database' do
-        markbest
+      before { markbest }
 
+      it 'does not mark answer best in database' do
         answer_first.reload
         expect(answer_first.best).to be_falsey
       end
 
       it 'does not render markbest js' do
-        markbest
         expect(response).to_not render_template :markbest
       end
     end

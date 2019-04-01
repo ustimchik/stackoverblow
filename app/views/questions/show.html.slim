@@ -12,10 +12,10 @@
   = render 'shared/errors', resource: @question
 
 .answer-best
-  = render @question.best_answer
+  = render @question.answers.best
 
 .answers
-  = render @question.other_answers
+  = render @question.answers.not_best
 
 .answer-errors
   = render 'shared/errors', resource: @answer
