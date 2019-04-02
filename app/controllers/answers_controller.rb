@@ -30,6 +30,6 @@ class AnswersController < ApplicationController
   end
 
   def answer_params
-    params.require(:answer).permit(:title, :body)
+    params.require(:answer).permit(:title, :body, files: [])
   end
 end

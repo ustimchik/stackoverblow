@@ -10,6 +10,10 @@ RSpec.describe Answer, type: :model do
   let!(:answer) { create(:answer, user: user, question: question) }
   let!(:second_answer) { create(:answer, user: user, question: question) }
 
+  it 'has many attached files' do
+    expect(answer.files).to be_an_instance_of(ActiveStorage::Attached::Many)
+  end
+
   # context with best flag set to false was omitted as this should be handled by the database
   # where false is set by default, e.g. second let! would fail if that is not working fine
   describe 'validates answer uniqueness scoped to question' do
