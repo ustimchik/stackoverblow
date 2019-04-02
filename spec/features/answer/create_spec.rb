@@ -9,14 +9,14 @@ feature 'User can create answer', %q{
   given(:user) {create(:user)}
   given(:question) { create(:question) }
 
-  context 'Authenticated user' do
+  context 'Authenticated user creates answer' do
 
     background do
       sign_in(user)
       visit question_path(question)
     end
 
-    scenario 'User creates answer OK', js: true do
+    scenario 'with no errors', js: true do
 
       fill_in 'Body', with: 'Text of the answer'
       click_on 'Answer'
@@ -26,7 +26,7 @@ feature 'User can create answer', %q{
       end
     end
 
-    scenario 'User creates answer with errors', js: true do
+    scenario 'with errors', js: true do
       click_on 'Answer'
       expect(page).to have_field 'Body'
       expect(page).to_not have_content 'Text of the answer'
@@ -35,7 +35,7 @@ feature 'User can create answer', %q{
       end
     end
 
-    scenario 'User creates answer with attached files', js: true do
+    scenario 'with no errors and with attached files', js: true do
       attach_file 'File', ["#{Rails.root}/spec/rails_helper.rb", "#{Rails.root}/spec/spec_helper.rb"]
       fill_in 'Body', with: 'Text of the answer'
       click_on 'Answer'

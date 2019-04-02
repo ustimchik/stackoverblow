@@ -8,14 +8,14 @@ feature 'User can create question', %q{
 
   given(:user) {create(:user)}
 
-  context 'Authenticated user' do
+  context 'Authenticated user asks a question' do
     background do
       sign_in(user)
       visit questions_path
       click_on 'Ask question'
     end
 
-    scenario 'asks a question' do
+    scenario 'with no errors' do
       fill_in 'Title', with: 'Test question'
       fill_in 'Body', with: 'Text of the question'
       click_on 'Ask'
@@ -24,12 +24,22 @@ feature 'User can create question', %q{
       expect(page).to have_content 'Text of the question'
     end
 
-    scenario 'asks a question with errors' do
+    scenario 'with errors' do
       click_on 'Ask'
       expect(page).to have_field 'Title'
       expect(page).to have_field 'Body'
       expect(page).to have_content "Title can't be blank"
       expect(page).to have_content "Body can't be blank"
+    end
+
+    scenario 'with no errors and with attached files', js: true do
+      attach_file 'File', ["#{Rails.root}/spec/rails_helper.rb", "#{Rails.root}/spec/spec_helper.rb"]
+      fill_in 'Title', with: 'Test question'
+      fill_in 'Body', with: 'Text of the question'
+      click_on 'Ask'
+
+      expect(page).to have_link 'rails_helper.rb'
+      expect(page).to have_link 'spec_helper.rb'
     end
   end
 
