@@ -1,5 +1,6 @@
 $('.answer-errors').html('<%= render 'shared/errors', resource: @answer %>');
 <% if !@answer.errors.present? %>
-  $('.answers').html('<%= j render @question.answers %>');
+  $('.answer-best').html('<%= j render @question.answers.best %>');
+  $('.answers').html('<%= j render @question.answers.not_best %>');
   $('.notice').html('<%= j 'Answer was successfully updated.' %>');
 <% end %>
