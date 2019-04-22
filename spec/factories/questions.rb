@@ -6,6 +6,13 @@ FactoryBot.define do
     trait :invalid do
       title { nil }
     end
+    trait :with_attachment do
+      after :create do |question|
+        file_path = Rails.root.join('spec', 'spec_helper.rb')
+        file = fixture_file_upload(file_path, 'tesfiles')
+        question.files.attach(file)
+      end
+    end
 
     factory :question_with_answers do
       # transient allows to pass data which is not attribute of the model for later use

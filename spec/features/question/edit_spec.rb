@@ -53,7 +53,7 @@ feature 'User can edit question', %q{
       expect(page).to_not have_link 'Edit'
     end
 
-    scenario 'edits his question with no errors and with attached files', js: true do
+    scenario 'edits his question with no errors and attaches files', js: true do
       within '.question' do
         click_on 'Edit'
         attach_file 'File', ["#{Rails.root}/spec/rails_helper.rb", "#{Rails.root}/spec/spec_helper.rb"]

@@ -5,6 +5,9 @@ Rails.application.routes.draw do
       post :markbest, on: :member
     end
   end
+  resources :attachments do
+    delete :destroy, on: :member
+  end
 
   root to: 'questions#index'
 end

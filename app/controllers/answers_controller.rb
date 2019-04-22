@@ -2,6 +2,7 @@ class AnswersController < ApplicationController
 
   before_action :authenticate_user!
   before_action :set_answer, only: [:update, :destroy, :markbest]
+  before_action :set_question, only: [:update, :destroy, :markbest]
 
   def create
     @question = Question.find(params[:question_id])
@@ -9,17 +10,14 @@ class AnswersController < ApplicationController
   end
 
   def update
-    @question = @answer.question
     @answer.update(answer_params) if current_user.author_of?(@answer)
   end
 
   def destroy
-    @question = @answer.question
     @answer.destroy if current_user.author_of?(@answer)
   end
 
   def markbest
-    @question = @answer.question
     @answer.markbest if current_user.author_of?(@question)
   end
 
@@ -27,6 +25,10 @@ class AnswersController < ApplicationController
 
   def set_answer
     @answer = Answer.with_attached_files.find(params[:id])
+  end
+
+  def set_question
+    @question = @answer.question
   end
 
   def answer_params

@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-feature 'Use can mark answer best', %q{
+feature 'User can mark answer best', %q{
   In order to let everyone know most helpful answer
   As an author of question
   I'd like to be able to mark one of the answers best

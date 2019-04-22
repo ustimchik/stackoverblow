@@ -50,8 +50,8 @@ feature 'User can create answer', %q{
       visit question_path(question)
       fill_in 'Body', with: 'Text of the answer'
       click_on 'Answer'
-      expect(page).to_not have_content 'Text of the answer'
 
+      expect(page).to_not have_content 'Text of the answer'
     end
   end
 
