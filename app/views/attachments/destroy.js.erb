@@ -1,4 +1,5 @@
 $('.question').html('<%= j render @question %>');
+$('.question').append('<%= j render partial: 'questions/hiddenqform' %>');
 $('.answer-best').html('<%= j render @question.answers.best %>');
 $('.answers').html('<%= j render @question.answers.not_best %>');
 $('.notice').html('<%= j 'Attachment has been removed.' %>');
