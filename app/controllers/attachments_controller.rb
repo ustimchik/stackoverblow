@@ -4,6 +4,6 @@ class AttachmentsController < ApplicationController
   def destroy
     @question = Question.find(params[:question])
     @attachment = ActiveStorage::Attachment.find(params[:id])
-    @attachment.purge_later if current_user.author_of?("#{@attachment.record_type}".constantize.find(@attachment.record_id))
+    @attachment.purge_later if current_user.author_of?(@attachment.record)
   end
 end
