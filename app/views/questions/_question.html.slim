@@ -1,10 +1,6 @@
 h1= @question.title
 p= @question.body
-- if @question.files.attached?
-  - @question.files.each do |file|
-    p= link_to file.filename.to_s, url_for(file)
-    - if current_user&.author_of?(@question)
-      p= link_to 'Remove file', attachment_path(file, question: @question), method: :delete, remote: true, class: 'btn btn-link'
+= render partial: 'attachments/filelist', locals: {parent_obj: @question}
 
 - if current_user&.author_of?(@question)
   = link_to 'Edit', '#', class: 'edit-question-link btn btn-link', data: { question_id: @question.id }

@@ -1,0 +1,5 @@
+- if parent_obj.files.attached?
+  - parent_obj.files.each do |file|
+    p= link_to file.filename.to_s, url_for(file), data: { file_id: file.id }
+    - if current_user&.author_of?(parent_obj)
+      p= link_to 'Remove file', attachment_path(file), method: :delete, remote: true, class: 'btn btn-link', data: { file_id: file.id }
