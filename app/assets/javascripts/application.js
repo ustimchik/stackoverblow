@@ -15,4 +15,5 @@
 //= require turbolinks
 //= require jquery3
 //= require twitter/bootstrap
+//= require cocoon
 //= require_tree .

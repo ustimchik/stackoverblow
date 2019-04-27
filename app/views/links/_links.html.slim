@@ -1,0 +1,5 @@
+- if parent_obj.links.present?
+  p Links:
+  ul
+    - parent_obj.links&.each do |link|
+      li= link_to link.name, link.url

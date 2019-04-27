@@ -1,6 +1,7 @@
 h1= @question.title
 p= @question.body
 = render partial: 'attachments/filelist', locals: {parent_obj: @question}
+= render partial: 'links/links', locals: {parent_obj: @question}
 
 - if current_user&.author_of?(@question)
   = link_to 'Edit', '#', class: 'edit-question-link btn btn-link', data: { question_id: @question.id }
