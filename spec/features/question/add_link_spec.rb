@@ -2,7 +2,7 @@ require 'rails_helper'
 
 feature 'User can add links to the question', %q{
   In order to provide reference to external resources
-  As an author of question
+  As logged on user creating the question
   I'd like to be able to add links to the question
 } do
 

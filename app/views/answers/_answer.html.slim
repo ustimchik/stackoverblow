@@ -2,6 +2,7 @@
   - if answer.persisted?
     p= answer.body
     = render partial: 'attachments/filelist', locals: {parent_obj: answer}
+    = render partial: 'links/links', locals: {parent_obj: answer}
     - if current_user&.author_of?(answer)
       = link_to 'Edit', '#', class: 'edit-answer-link btn btn-link', data: { answer_id: answer.id }
       = link_to 'Delete', answer, remote: true, method: :delete, class: 'btn btn-link'

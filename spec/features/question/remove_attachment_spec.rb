@@ -16,21 +16,21 @@ feature 'User can remove any attachment', %q{
     expect(page).to_not have_button 'Remove file'
   end
 
-  scenario 'Authenticated, but not an answer author does not have remove attachment button' do
+  scenario 'Authenticated, but not question author does not have remove attachment button' do
     sign_in(other_user)
     visit question_path(question)
 
     expect(page).to_not have_button 'Remove file'
   end
 
-  describe 'Authenticated answer author', js: true do
+  describe 'Authenticated question author', js: true do
     before do
       sign_in(user)
       visit question_path(question)
       click_on 'Remove file'
     end
 
-    scenario 'deletes attachment from the answer', js: true do
+    scenario 'deletes attachment from the question', js: true do
       expect(page).to have_content 'Attachment has been removed.'
       expect(page).to_not have_link "spec_helper.rb"
     end
