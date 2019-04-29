@@ -8,9 +8,4 @@
       = link_to 'Delete', answer, remote: true, method: :delete, class: 'btn btn-link'
     - if current_user&.author_of?(answer.question)
       = link_to 'Mark Best', markbest_answer_path(answer), method: :post, remote: true, class: 'btn btn-link'
-    = form_with model: answer, class: 'hidden', html: { id: "edit-answer-#{answer.id}"} do |f|
-      = f.label :body, 'Your answer'
-      = f.text_area :body
-      = f.label :files
-      = f.file_field :files, multiple: true
-      = f.submit 'Save'
+    = render 'answers/hiddenaform', answer: answer

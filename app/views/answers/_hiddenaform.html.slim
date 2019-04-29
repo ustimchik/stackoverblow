@@ -1,8 +1,5 @@
-= form_with model: @question, local: true do |f|
-  = render 'shared/errors', resource: @question
-  = f.label :title
-  = f.text_field :title
-  = f.label :body
+= form_with model: answer, class: 'hidden', html: { id: "edit-answer-#{answer.id}"} do |f|
+  = f.label :body, 'Your answer'
   = f.text_area :body
   = f.label :files
   = f.file_field :files, multiple: true
@@ -11,4 +8,4 @@
       = render partial: 'links/link_fields', locals: {f: link_f}
     .links
       = link_to_add_association 'add link', f, :links, partial: 'links/link_fields'
-  = f.submit 'Ask'
+  = f.submit 'Save'
