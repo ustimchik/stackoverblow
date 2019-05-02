@@ -20,7 +20,6 @@ feature 'User can get and view awards assigned to the question', %q{
 
   context 'When the answer marked best for the first time', js: true do
     before do
-      wait_for_ajax
       within "#answer-#{answer.id}" do
         click_on 'Mark Best'
       end
@@ -29,7 +28,6 @@ feature 'User can get and view awards assigned to the question', %q{
 
     scenario 'Authenticated answer owner gets the award', js: true do
       visit user_path(user)
-      wait_for_ajax
 
       within '.awards' do
         expect(page).to have_content 'My award'
@@ -52,7 +50,6 @@ feature 'User can get and view awards assigned to the question', %q{
       end
       wait_for_ajax
       visit user_path(user)
-      wait_for_ajax
 
       within '.awards' do
         expect(page).to_not have_content 'My award'
@@ -66,7 +63,6 @@ feature 'User can get and view awards assigned to the question', %q{
       end
       wait_for_ajax
       visit user_path(other_user)
-      wait_for_ajax
 
       within '.awards' do
         expect(page).to have_content 'My award'

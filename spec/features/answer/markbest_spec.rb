@@ -45,6 +45,7 @@ feature 'User can mark answer best', %q{
       within "#answer-#{other_answer.id}" do
         click_on 'Mark Best'
       end
+      wait_for_ajax
 
       expect(page).to have_content 'Answer was successfully marked the best.'
       within '.answer-best' do
