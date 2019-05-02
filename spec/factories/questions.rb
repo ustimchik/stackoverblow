@@ -9,8 +9,17 @@ FactoryBot.define do
     trait :with_attachment do
       after :create do |question|
         file_path = Rails.root.join('spec', 'spec_helper.rb')
-        file = fixture_file_upload(file_path, 'tesfiles')
+        file = fixture_file_upload(file_path, 'testfiles')
         question.files.attach(file)
+      end
+    end
+
+    trait :with_award do
+      after :create do |question|
+        image = fixture_file_upload("#{Rails.root}/app/assets/images/test_image.png")
+        award = Award.new(name: 'My award')
+        award.image = image
+        question.award = award
       end
     end
 

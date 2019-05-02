@@ -15,7 +15,7 @@ FactoryBot.define do
     trait :with_attachment do
       after :create do |answer|
         file_path = Rails.root.join('spec', 'spec_helper.rb')
-        file = fixture_file_upload(file_path, 'tesfiles')
+        file = fixture_file_upload(file_path, 'testfiles')
         answer.files.attach(file)
       end
     end

@@ -15,6 +15,7 @@ feature 'User can add links while editing the answer', %q{
     visit question_path(question)
     fill_in 'Body', with: 'Text of the answer'
     click_on 'Answer'
+    wait_for_ajax
     click_on 'Edit'
     within '.answers' do
       click_on 'add link'

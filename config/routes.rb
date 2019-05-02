@@ -9,5 +9,7 @@ Rails.application.routes.draw do
     delete :destroy, on: :member
   end
 
+  resources :users, only: [:show]
+
   root to: 'questions#index'
 end

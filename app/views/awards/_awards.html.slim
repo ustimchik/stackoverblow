@@ -1,0 +1,15 @@
+.awards
+  p User awards:
+  table
+    thead
+      tr
+        th Question
+        th Award name
+        th Award badge
+    tbody
+    - user.awards.each do |award|
+      tr
+        th= link_to "#{award.question.title}", question_path(award.question)
+        th= award.name
+        th
+          =image_tag award.image, class:"badge-thumbnail"

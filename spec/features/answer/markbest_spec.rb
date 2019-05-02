@@ -32,6 +32,7 @@ feature 'User can mark answer best', %q{
       within "#answer-#{answer.id}" do
         click_on 'Mark Best'
       end
+      wait_for_ajax
     end
 
     scenario 'marks answer best first time', js: true do
@@ -51,4 +52,5 @@ feature 'User can mark answer best', %q{
       end
     end
   end
+
 end

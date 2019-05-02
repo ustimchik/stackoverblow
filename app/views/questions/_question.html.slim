@@ -1,8 +1,12 @@
-h1= @question.title
+h3= @question.title
 p= @question.body
 = render partial: 'attachments/filelist', locals: {parent_obj: @question}
 = render partial: 'links/links', locals: {parent_obj: @question}
-
+p
+- if @question.award
+  p= "Award name: #{@question.award.name}"
+  p= image_tag @question.award.image, class:"badge-thumbnail"
+p
 - if current_user&.author_of?(@question)
   = link_to 'Edit', '#', class: 'edit-question-link btn btn-link', data: { question_id: @question.id }
   = link_to 'Delete', @question, remote: true, method: :delete, class: 'btn btn-link'

@@ -20,8 +20,10 @@ feature 'User can remove links from the question', %q{
     fill_in 'Link name', with: 'My link'
     fill_in 'Link URL', with: url
     click_on 'Save'
+    sleep 3
     visit question_path(question)
     click_on 'Edit'
+    sleep 3
     click_on 'remove link'
     click_on 'Save'
 
