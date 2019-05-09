@@ -6,7 +6,14 @@ p
 - if @question.award
   p= "Award name: #{@question.award.name}"
   p= image_tag @question.award.image, class:"badge-thumbnail"
-p
+.votescore
+  p = "Votes: #{@question.votescore}"
 - if current_user&.author_of?(@question)
   = link_to 'Edit', '#', class: 'edit-question-link btn btn-link', data: { question_id: @question.id }
   = link_to 'Delete', @question, remote: true, method: :delete, class: 'btn btn-link'
+- else
+  - if current_user
+    .qvotebuttons
+      = link_to '', '#', class: "upvote #{@question.upvoted?(current_user)? "on" : ""}", title: 'Upvote', data: { question_id: @question.id }
+      = link_to '', '#', class: "clearvote", title: 'Clear vote', data: { question_id: @question.id }
+      = link_to '', '#', class: "downvote #{@question.downvoted?(current_user)? "on" : ""}", title: 'Downvote', data: { question_id: @question.id }

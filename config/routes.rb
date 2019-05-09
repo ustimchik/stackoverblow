@@ -1,7 +1,14 @@
 Rails.application.routes.draw do
   devise_for :users
-  resources :questions do
-    resources :answers, shallow: true do
+
+  concern :voteable do
+    post :upvote, on: :member
+    post :downvote, on: :member
+    post :clearvote, on: :member
+  end
+
+  resources :questions, concerns: [:voteable] do
+    resources :answers, concerns: [:voteable], shallow: true do
       post :markbest, on: :member
     end
   end

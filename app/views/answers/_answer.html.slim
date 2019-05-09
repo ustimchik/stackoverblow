@@ -1,11 +1,18 @@
 .answer id = 'answer-#{answer.id}'
   - if answer.persisted?
     p= answer.body
+    .votescore
+      p = "Votes: #{answer.votescore}"
     = render partial: 'attachments/filelist', locals: {parent_obj: answer}
     = render partial: 'links/links', locals: {parent_obj: answer}
     - if current_user&.author_of?(answer)
       = link_to 'Edit', '#', class: 'edit-answer-link btn btn-link', data: { answer_id: answer.id }
       = link_to 'Delete', answer, remote: true, method: :delete, class: 'btn btn-link'
+    - elsif current_user
+      .avotebuttons
+        = link_to '', '#', class: "upvote #{answer.upvoted?(current_user) ? "on" : ""}", title: 'Upvote', data: {answer_id: answer.id}
+        = link_to '', '#', class: 'clearvote', title: 'Clear vote', data: {answer_id: answer.id}
+        = link_to '', '#', class: "downvote #{answer.downvoted?(current_user) ? "on" : ""}", title: 'Downvote', data: {answer_id: answer.id}
     - if current_user&.author_of?(answer.question)
       = link_to 'Mark Best', markbest_answer_path(answer), method: :post, remote: true, class: 'btn btn-link'
     = render 'answers/hiddenaform', answer: answer

@@ -1,0 +1,36 @@
+.upvote {
+    display: inline-block;
+    overflow: hidden;
+    width: 40px;
+    height: 25px;
+    cursor: pointer;
+    background-image: url(asset_path('upvote_button.png'));
+    background-position: 0 -25px;
+}
+
+.upvote.on {
+    background-position: 0 2px;
+}
+
+.downvote {
+    display: inline-block;
+    overflow: hidden;
+    width: 40px;
+    height: 25px;
+    cursor: pointer;
+    background-image: url(asset_path('downvote_button.png'));
+    background-position: 0 -25px;
+}
+
+.downvote.on {
+    background-position: 0 2px;
+}
+
+.clearvote {
+    display: inline-block;
+    overflow: hidden;
+    width: 40px;
+    height: 25px;
+    cursor: pointer;
+    background-image: url(asset_path('clearvote_button.png'));
+}
