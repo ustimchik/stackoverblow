@@ -23,7 +23,7 @@ $(document).on('turbolinks:load',function() {
                 $('#answer-' + answerId).find('.avotebuttons').children('.downvote').removeClass('on');
                 $('#answer-' + answerId).find('.avotebuttons').children('.upvote').addClass('on');
                 $('#answer-' + answerId).find('.votescore').text("Votes: " + response.score);
-                $('.answer-errors').html(response.notice);
+                $('#answer-' + answerId).find('.answer-errors').html(response.notice);
             })
     });
 
@@ -43,7 +43,7 @@ $(document).on('turbolinks:load',function() {
                 console.log(answerId);
                 $('#answer-' + answerId).find('.avotebuttons').children().removeClass('on');
                 $('#answer-' + answerId).find('.votescore').text("Votes: " + response.score);
-                $('.answer-errors').html(response.notice);
+                $('#answer-' + answerId).find('.answer-errors').html(response.notice);
             })
     });
 
@@ -64,7 +64,7 @@ $(document).on('turbolinks:load',function() {
                 $('#answer-' + answerId).find('.avotebuttons').children('.upvote').removeClass('on');
                 $('#answer-' + answerId).find('.avotebuttons').children('.downvote').addClass('on');
                 $('#answer-' + answerId).find('.votescore').text("Votes: " + response.score);
-                $('.answer-errors').html(response.notice);
+                $('#answer-' + answerId).find('.answer-errors').html(response.notice);
             })
     });
 });

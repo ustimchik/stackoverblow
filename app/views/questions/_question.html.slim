@@ -1,19 +1,31 @@
-h3= @question.title
-p= @question.body
-= render partial: 'attachments/filelist', locals: {parent_obj: @question}
-= render partial: 'links/links', locals: {parent_obj: @question}
-p
-- if @question.award
-  p= "Award name: #{@question.award.name}"
-  p= image_tag @question.award.image, class:"badge-thumbnail"
-.votescore
-  p = "Votes: #{@question.votescore}"
-- if current_user&.author_of?(@question)
-  = link_to 'Edit', '#', class: 'edit-question-link btn btn-link', data: { question_id: @question.id }
-  = link_to 'Delete', @question, remote: true, method: :delete, class: 'btn btn-link'
-- else
-  - if current_user
-    .qvotebuttons
-      = link_to '', '#', class: "upvote #{@question.upvoted?(current_user)? "on" : ""}", title: 'Upvote', data: { question_id: @question.id }
-      = link_to '', '#', class: "clearvote", title: 'Clear vote', data: { question_id: @question.id }
-      = link_to '', '#', class: "downvote #{@question.downvoted?(current_user)? "on" : ""}", title: 'Downvote', data: { question_id: @question.id }
+.container
+  .row
+    .col class="col-xs-1"
+      .votescore
+        p = "Votes: #{@question.votescore}"
+      - if current_user&.author_of?(@question)
+        = link_to 'Edit', '#', class: 'edit-question-link btn btn-link', data: {question_id: @question.id}
+        = link_to 'Delete', @question, remote: true, method: :delete, class: 'btn btn-link'
+      - else
+        - if current_user
+          .qvotebuttons
+            = link_to '', '#', class: "upvote #{@question.upvoted?(current_user) ? "on" : ""}", title: 'Upvote', data: {question_id: @question.id}
+            = link_to '', '#', class: "clearvote", title: 'Clear vote', data: {question_id: @question.id}
+            = link_to '', '#', class: "downvote #{@question.downvoted?(current_user) ? "on" : ""}", title: 'Downvote', data: {question_id: @question.id}
+    .col class="col-xs-8"
+      .row
+        .col class="col-xs-8"
+          h3= @question.title
+        .col class="col-xs-8"
+          p= @question.body
+    .col class="col-xs-3"
+      .row
+        .col
+          = render partial: 'attachments/filelist', locals: {parent_obj: @question}
+        .col
+          = render partial: 'links/links', locals: {parent_obj: @question}
+        .col
+          - if @question.award
+            = "Award name: #{@question.award.name}"
+            = image_tag @question.award.image, class: "badge-thumbnail"
+br

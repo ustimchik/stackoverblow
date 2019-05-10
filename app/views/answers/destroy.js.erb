@@ -1,4 +1,4 @@
-$('.answer-errors').html('<%= render 'shared/errors', resource: @answer %>');
+$('#answer-' + <%= @answer.id %>).find('.answer-errors').html('<%= render 'shared/errors', resource: @answer %>');
 <% if !@answer.errors.present? %>
   $('#answer-' + <%= @answer.id %>).remove();
   $('.notice').html('<%= j 'Answer was successfully deleted.' %>');

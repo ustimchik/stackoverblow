@@ -1,4 +1,4 @@
-$('.answer-errors').html('<%= render 'shared/errors', resource: @answer %>');
+$('#answer-' + <%= @answer.id %>).find('.answer-errors').html('<%= render 'shared/errors', resource: @answer %>');
 <% if !@answer.errors.present? %>
   $('.answer-best').html('<%= j render @question.answers.best %>');
   $('.answers').html('<%= j render @question.answers.not_best %>');
