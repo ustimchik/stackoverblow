@@ -17,7 +17,6 @@ RSpec.describe Answer, type: :model do
   it 'has many attached files' do
     expect(answer.files).to be_an_instance_of(ActiveStorage::Attached::Many)
   end
-
   # context with best flag set to false was omitted as this should be handled by the database
   # where false is set by default, e.g. second let! would fail if that is not working fine
   describe 'validates answer uniqueness scoped to question' do
@@ -60,5 +59,10 @@ RSpec.describe Answer, type: :model do
         expect(question.answers.where(best: true).count).to eq(1)
       end
     end
+  end
+
+  context 'votable' do
+    let!(:voteable_item) { create(:answer) }
+    it_behaves_like "Voteable Model"
   end
 end
