@@ -250,4 +250,9 @@ RSpec.describe QuestionsController, type: :controller do
     end
   end
 
+  context 'votable' do
+    let!(:voteable_item) { create(:question, user: user) }
+    it_behaves_like "Voteable Controller"
+  end
+
 end

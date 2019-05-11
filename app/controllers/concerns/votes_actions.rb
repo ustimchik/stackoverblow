@@ -7,7 +7,7 @@ module VotesActions
 
   def upvote
     if current_user.author_of?(@item)
-      render json: { score: @item.votescore, notice: "You can not upvote your own #{@item_class.to_s.downcase}" }
+      render json: { score: @item.votescore, notice: "You can not vote for your own #{@item_class.to_s.downcase}" }
     elsif @item.upvoted?(current_user)
       render json: { score: @item.votescore, notice: "You have already voted for this #{@item_class.to_s.downcase}" }
     else
@@ -18,9 +18,9 @@ module VotesActions
 
   def downvote
     if current_user.author_of?(@item)
-      render json: { score: @item.votescore, notice: "You can not upvote your own #{@item_class.to_s.downcase}" }
+      render json: { score: @item.votescore, notice: "You can not vote against your own #{@item_class.to_s.downcase}" }
     elsif @item.downvoted?(current_user)
-      render json: { score: @item.votescore, notice: "You have already voted for this #{@item_class.to_s.downcase}" }
+      render json: { score: @item.votescore, notice: "You have already voted against this #{@item_class.to_s.downcase}" }
     else
       @item.downvote(current_user)
       render json: { score: @item.votescore, notice: "You have voted against this #{@item_class.to_s.downcase}" }
@@ -29,7 +29,7 @@ module VotesActions
 
   def clearvote
     if current_user.author_of?(@item)
-      render json: { score: @item.votescore, notice: "You can not upvote your own #{@item_class.to_s.downcase}" }
+      render json: { score: @item.votescore, notice: "You can not clear votes for your own #{@item_class.to_s.downcase}" }
     elsif !@item.upvoted?(current_user) && !@item.downvoted?(current_user)
       render json: { score: @item.votescore, notice: "You have not voted for this #{@item_class.to_s.downcase}" }
     else
