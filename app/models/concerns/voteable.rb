@@ -14,7 +14,7 @@ module Voteable
   end
 
   def clearvote(user)
-    vote(user, 0)
+    votes.where(user: user).first.try(:destroy)
   end
 
   def votescore

@@ -1,0 +1,4 @@
+.votebuttons
+  = link_to '', polymorphic_path([parent_obj], action: 'upvote'), method: :post, remote: true, class: "upvote #{parent_obj.upvoted?(current_user) ? "on" : ""}", title: 'Upvote'
+  = link_to '', polymorphic_path([parent_obj], action: 'clearvote'), method: :post, remote: true, class: "clearvote #{parent_obj.voted?(current_user) ? "on" : ""}", title: 'Clear vote'
+  = link_to '', polymorphic_path([parent_obj], action: 'downvote'), method: :post, remote: true, class: "downvote #{parent_obj.downvoted?(current_user) ? "on" : ""}", title: 'Downvote'

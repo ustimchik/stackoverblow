@@ -38,7 +38,7 @@ feature 'User can vote for the question', %q{
           visit question_path(question)
         end
         scenario 'upvotes the question', js: true do
-          within '.qvotebuttons' do
+          within '.votebuttons' do
             find('.upvote').click
           end
           wait_for_ajax
@@ -48,7 +48,7 @@ feature 'User can vote for the question', %q{
           end
         end
         scenario 'downvotes the question', js: true do
-          within '.qvotebuttons' do
+          within '.votebuttons' do
             find('.downvote').click
           end
           wait_for_ajax
@@ -62,13 +62,13 @@ feature 'User can vote for the question', %q{
         before js: true do
           sign_in(other_user)
           visit question_path(question)
-          within '.qvotebuttons' do
+          within '.votebuttons' do
             find('.upvote').click
           end
           wait_for_ajax
         end
         scenario 'upvotes the question', js: true do
-          within '.qvotebuttons' do
+          within '.votebuttons' do
             find('.upvote').click
           end
           wait_for_ajax
@@ -78,7 +78,7 @@ feature 'User can vote for the question', %q{
           end
         end
         scenario 'downvotes the question', js: true do
-          within '.qvotebuttons' do
+          within '.votebuttons' do
             find('.downvote').click
           end
           wait_for_ajax
@@ -88,7 +88,7 @@ feature 'User can vote for the question', %q{
           end
         end
         scenario 'clears vote for the question', js: true do
-          within '.qvotebuttons' do
+          within '.votebuttons' do
             find('.clearvote').click
           end
           wait_for_ajax
@@ -102,13 +102,13 @@ feature 'User can vote for the question', %q{
         before js: true do
           sign_in(other_user)
           visit question_path(question)
-          within '.qvotebuttons' do
+          within '.votebuttons' do
             find('.downvote').click
           end
           wait_for_ajax
         end
         scenario 'upvotes the question', js: true do
-          within '.qvotebuttons' do
+          within '.votebuttons' do
             find('.upvote').click
           end
           wait_for_ajax
@@ -118,7 +118,7 @@ feature 'User can vote for the question', %q{
           end
         end
         scenario 'downvotes the question', js: true do
-          within '.qvotebuttons' do
+          within '.votebuttons' do
             find('.downvote').click
           end
           wait_for_ajax
@@ -128,7 +128,7 @@ feature 'User can vote for the question', %q{
           end
         end
         scenario 'clears vote for the question', js: true do
-          within '.qvotebuttons' do
+          within '.votebuttons' do
             find('.clearvote').click
           end
           wait_for_ajax

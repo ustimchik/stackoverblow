@@ -42,8 +42,8 @@ feature 'User can vote for the answer', %q{
           visit question_path(question)
         end
         scenario 'upvotes the answer', js: true do
-          within '.avotebuttons' do
-            find('.upvote').click
+          within "#answer-#{answer.id}" do
+            find('.votebuttons').find('.upvote').click
           end
           wait_for_ajax
 
@@ -52,8 +52,8 @@ feature 'User can vote for the answer', %q{
           end
         end
         scenario 'downvotes the answer', js: true do
-          within '.avotebuttons' do
-            find('.downvote').click
+          within "#answer-#{answer.id}" do
+            find('.votebuttons').find('.downvote').click
           end
           wait_for_ajax
 
@@ -66,14 +66,14 @@ feature 'User can vote for the answer', %q{
         before js: true do
           sign_in(user)
           visit question_path(question)
-          within '.avotebuttons' do
-            find('.upvote').click
+          within "#answer-#{answer.id}" do
+            find('.votebuttons').find('.upvote').click
           end
           wait_for_ajax
         end
         scenario 'upvotes the answer', js: true do
-          within '.avotebuttons' do
-            find('.upvote').click
+          within "#answer-#{answer.id}" do
+            find('.votebuttons').find('.upvote').click
           end
           wait_for_ajax
 
@@ -82,8 +82,8 @@ feature 'User can vote for the answer', %q{
           end
         end
         scenario 'downvotes the answer', js: true do
-          within '.avotebuttons' do
-            find('.downvote').click
+          within "#answer-#{answer.id}" do
+            find('.votebuttons').find('.downvote').click
           end
           wait_for_ajax
 
@@ -92,8 +92,8 @@ feature 'User can vote for the answer', %q{
           end
         end
         scenario 'clears vote for the answer', js: true do
-          within '.avotebuttons' do
-            find('.clearvote').click
+          within "#answer-#{answer.id}" do
+            find('.votebuttons').find('.clearvote').click
           end
           wait_for_ajax
 
@@ -106,14 +106,14 @@ feature 'User can vote for the answer', %q{
         before js: true do
           sign_in(user)
           visit question_path(question)
-          within '.avotebuttons' do
-            find('.downvote').click
+          within "#answer-#{answer.id}" do
+            find('.votebuttons').find('.downvote').click
           end
           wait_for_ajax
         end
         scenario 'upvotes the answer', js: true do
-          within '.avotebuttons' do
-            find('.upvote').click
+          within "#answer-#{answer.id}" do
+            find('.votebuttons').find('.upvote').click
           end
           wait_for_ajax
 
@@ -122,8 +122,8 @@ feature 'User can vote for the answer', %q{
           end
         end
         scenario 'downvotes the answer', js: true do
-          within '.avotebuttons' do
-            find('.downvote').click
+          within "#answer-#{answer.id}" do
+            find('.votebuttons').find('.downvote').click
           end
           wait_for_ajax
 
@@ -132,8 +132,8 @@ feature 'User can vote for the answer', %q{
           end
         end
         scenario 'clears vote for the answer', js: true do
-          within '.avotebuttons' do
-            find('.clearvote').click
+          within "#answer-#{answer.id}" do
+            find('.votebuttons').find('.clearvote').click
           end
           wait_for_ajax
 

@@ -8,10 +8,7 @@
         = link_to 'Delete', @question, remote: true, method: :delete, class: 'btn btn-link'
       - else
         - if current_user
-          .qvotebuttons
-            = link_to '', '#', class: "upvote #{@question.upvoted?(current_user) ? "on" : ""}", title: 'Upvote', data: {question_id: @question.id}
-            = link_to '', '#', class: "clearvote", title: 'Clear vote', data: {question_id: @question.id}
-            = link_to '', '#', class: "downvote #{@question.downvoted?(current_user) ? "on" : ""}", title: 'Downvote', data: {question_id: @question.id}
+          = render partial: 'common/votebuttons', locals: {parent_obj: @question}
     .col class="col-xs-8"
       .row
         .col class="col-xs-8"

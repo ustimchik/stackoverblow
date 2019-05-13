@@ -72,8 +72,8 @@ shared_examples_for 'Voteable Model' do
 
   describe 'clearvote' do
     context 'vote does not exist' do
-      it 'should increment number of records in Votes' do
-        expect { voteable_item.clearvote(user) }.to change(Vote, :count).by(1)
+      it 'should NOT change the number of records in Votes' do
+        expect { voteable_item.clearvote(user) }.to_not change(Vote, :count)
       end
       it 'should set vote score for an item to 0' do
         voteable_item.clearvote(user)
@@ -83,8 +83,8 @@ shared_examples_for 'Voteable Model' do
     context 'upvote exists' do
       let!(:vote) { create(:vote, score: 1, user: user, voteable: voteable_item) }
 
-      it 'should NOT increment number of records in Votes' do
-        expect { voteable_item.clearvote(user) }.to_not change(Vote, :count)
+      it 'should decrease the number of records in Votes by 1' do
+        expect { voteable_item.clearvote(user) }.to change(Vote, :count).by(-1)
       end
       it 'should set vote score for an item' do
         voteable_item.clearvote(user)
@@ -94,8 +94,8 @@ shared_examples_for 'Voteable Model' do
     context 'downvote exists' do
       let!(:vote) { create(:vote, score: -1, user: user, voteable: voteable_item) }
 
-      it 'should NOT increment number of records in Votes' do
-        expect { voteable_item.clearvote(user) }.to_not change(Vote, :count)
+      it 'should decrease the number of records in Votes by 1' do
+        expect { voteable_item.clearvote(user) }.to change(Vote, :count).by(-1)
       end
       it 'should set vote score for an item' do
         voteable_item.clearvote(user)
