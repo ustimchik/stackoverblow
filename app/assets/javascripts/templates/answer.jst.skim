@@ -1,0 +1,40 @@
+- body = @data['body']
+- question_id = @data['question_id']
+- question_user_id = @data['question_user_id']
+- answer_user_id = @data['user_id']
+- answer_id = @data['id']
+- attachments = @data['attachments']
+
+br
+  .answer id = 'answer-#{answer_id}'
+    .container
+      .row
+        .col class="col-xs-1"
+          .votescore
+            p = "Votes: 0"
+          - if gon.current_user_id
+            .votebuttons
+              a href="/answers/#{answer_id}/upvote" data-remote="true" data-method="post" title="Upvote" class="upvote"
+              a href="/answers/#{answer_id}/clearvote" data-remote="true" data-method="post" title="Clear vote" class="clearvote"
+              a href="/answers/#{answer_id}/downvote" data-remote="true" data-method="post" title="Downvote" class="downvote"
+          - if gon.current_user_id == (question_user_id)
+            form.button_to action="/answers/#{answer_id}/markbest" data-remote="true" method="post"
+              input data-remote="true" type="submit" value="Mark Best" class="btn btn-link"
+        .col class="col-xs-8"
+          p= body
+          - if attachments.length > 0
+            p Files:
+            ul
+              - $.each attachments, (index, file)=>
+              li
+                a href="#{file.url}" #{file.filename}
+        .col class="col-xs-3"
+          .row
+            .col
+              #filelist
+            .col
+              #links
+      .row
+        .answer-errors
+      .row
+br

@@ -25,7 +25,6 @@ feature 'User can create answer', %q{
         expect(page).to have_content 'Text of the answer'
       end
     end
-
     scenario 'with errors', js: true do
       click_on 'Answer'
       expect(page).to have_field 'Body'

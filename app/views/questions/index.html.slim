@@ -1,6 +1,7 @@
-- @questions.each do |question|
-  ul
-    li = link_to "#{question.title}", question
-
+.notice class="alert"
+.questions
+    - @questions.each do |question|
+        ul
+            li = link_to "#{question.title}", question
 
 p= link_to 'Ask question', new_question_path

@@ -3,6 +3,7 @@ class QuestionsController < ApplicationController
 
   before_action :authenticate_user!, except: [:index, :show]
   before_action :set_question, only: [:show, :edit, :update, :destroy]
+  after_action :stream_question, only: [:create]
 
   def index
     @questions = Question.all
@@ -10,6 +11,8 @@ class QuestionsController < ApplicationController
 
   def show
     @answer = Answer.new
+    gon.question_id = @question.id
+    gon.question_user_id = @question.user.id
   end
 
   def new
@@ -47,6 +50,12 @@ class QuestionsController < ApplicationController
 
   def set_question
     @question = Question.with_attached_files.find(params[:id])
+    gon.question_id = @question.id
+  end
+
+  def stream_question
+    return if @question.errors.any?
+    ActionCable.server.broadcast('questions', ApplicationController.render(partial: 'questions/question_item', locals: { question: @question }))
   end
 
   def question_params
