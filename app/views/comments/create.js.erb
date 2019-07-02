@@ -1,0 +1,6 @@
+$('.notice').html('<%= render 'shared/errors', resource: @comment %>');
+<% if @comment.persisted? %>
+  $('<%= @css %>').find('.comments').append('<%= j render @comment %>');
+  $('.new-comment #comment_body').val('');
+  $('.notice').html('<%= j 'Comment was successfully added.' %>');
+<% end %>

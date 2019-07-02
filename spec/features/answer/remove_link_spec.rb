@@ -1,9 +1,9 @@
 require 'rails_helper'
 
-feature 'User can remove links from the question', %q{
+feature 'User can remove links from the answer', %q{
   In order to remove reference to external resources
-  As question owner
-  I'd like to be able to remove links from the question
+  As answer owner
+  I'd like to be able to remove links from the answer
 } do
 
   given!(:user) { create(:user) }
@@ -13,7 +13,7 @@ feature 'User can remove links from the question', %q{
   scenario 'User removes links when editing the question', js: true do
     sign_in(user)
     visit question_path(question)
-    fill_in 'Body', with: 'Text of the answer'
+    fill_in 'New answer', with: 'Text of the answer'
     click_on 'Answer'
     click_on 'Edit'
     within '.answers' do

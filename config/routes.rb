@@ -8,8 +8,10 @@ Rails.application.routes.draw do
   end
 
   resources :questions, concerns: [:voteable] do
+    resources :comments, shallow: true
     resources :answers, concerns: [:voteable], shallow: true do
       post :markbest, on: :member
+      resources :comments, shallow: true
     end
   end
   resources :attachments do

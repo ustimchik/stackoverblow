@@ -14,7 +14,7 @@ feature 'User can add links to the question', %q{
     sign_in(user)
     visit new_question_path
     fill_in 'Title', with: 'Question title'
-    fill_in 'Body', with: 'Question text'
+    fill_in 'Your question', with: 'Question text'
     click_on 'add link'
   end
 

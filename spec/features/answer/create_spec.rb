@@ -18,7 +18,7 @@ feature 'User can create answer', %q{
 
     scenario 'with no errors', js: true do
 
-      fill_in 'Body', with: 'Text of the answer'
+      fill_in 'New answer', with: 'Text of the answer'
       click_on 'Answer'
       expect(current_path).to eq question_path(question)
       within '.answers' do
@@ -27,7 +27,7 @@ feature 'User can create answer', %q{
     end
     scenario 'with errors', js: true do
       click_on 'Answer'
-      expect(page).to have_field 'Body'
+      expect(page).to have_field 'New answer'
       expect(page).to_not have_content 'Text of the answer'
       within '.answer-errors' do
         expect(page).to have_content "Body can't be blank"
@@ -36,7 +36,7 @@ feature 'User can create answer', %q{
 
     scenario 'with no errors and with attached files', js: true do
       attach_file 'File', ["#{Rails.root}/spec/rails_helper.rb", "#{Rails.root}/spec/spec_helper.rb"]
-      fill_in 'Body', with: 'Text of the answer'
+      fill_in 'New answer', with: 'Text of the answer'
       click_on 'Answer'
 
       expect(page).to have_link 'rails_helper.rb'
@@ -47,7 +47,7 @@ feature 'User can create answer', %q{
   context 'Unauthenticated user', js: true do
     scenario 'asks a question' do
       visit question_path(question)
-      fill_in 'Body', with: 'Text of the answer'
+      fill_in 'New answer', with: 'Text of the answer'
       click_on 'Answer'
 
       expect(page).to_not have_content 'Text of the answer'

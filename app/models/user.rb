@@ -7,6 +7,7 @@ class User < ApplicationRecord
   has_many :questions, dependent: :destroy
   has_many :answers, dependent: :destroy
   has_many :awards
+  has_many :comments
 
   def author_of?(item)
     item.user_id == id

@@ -1,0 +1,4 @@
+= form_with model: comment, class: 'hidden', html: { id: "edit-comment-#{comment.id}"} do |f|
+  = f.label :body, 'Your comment'
+  = f.text_area :body
+  = f.submit 'Update comment'

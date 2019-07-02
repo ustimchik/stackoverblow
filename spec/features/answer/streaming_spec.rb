@@ -24,7 +24,7 @@ feature 'User can see the newly added answer', %q{
     Capybara.using_session('owner') do
       sign_in user
       visit question_path(question)
-      fill_in 'Body', with: 'Text of the answer'
+      fill_in 'New answer', with: 'Text of the answer'
       click_on 'Answer'
     end
 

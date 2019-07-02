@@ -13,7 +13,7 @@ feature 'User can add links while editing the answer', %q{
   scenario 'User adds links while editing the answer', js: true do
     sign_in(user)
     visit question_path(question)
-    fill_in 'Body', with: 'Text of the answer'
+    fill_in 'New answer', with: 'Text of the answer'
     click_on 'Answer'
     wait_for_ajax
     click_on 'Edit'

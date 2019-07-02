@@ -12,7 +12,7 @@ feature 'User can add award to the question', %q{
     sign_in(user)
     visit new_question_path
     fill_in 'Title', with: 'Question title'
-    fill_in 'Body', with: 'Question text'
+    fill_in 'Your question', with: 'Question text'
     fill_in 'Award name', with: 'My award'
     attach_file 'Award image', "#{Rails.root}/app/assets/images/test_image.png"
     click_on 'Ask'

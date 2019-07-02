@@ -26,4 +26,13 @@
           - if question.award
             = "Award name: #{question.award.name}"
             = image_tag question.award.image, class: "badge-thumbnail"
+  .row
+    .col class="col-xs-1"
+    .col class="col-xs-8"
+      .comments
+        p Comments:
+        = render question.comments
+      .new-comment
+        = render partial: 'comments/form', locals: {resource: question}
+    .col class="col-xs-3"
 br

@@ -25,21 +25,20 @@ feature 'User can edit question', %q{
     scenario 'edits his question', js: true do
       within '.question' do
         click_on 'Edit'
-        fill_in 'Body', with: 'edited question'
+        fill_in 'Your question', with: 'edited question'
         click_on 'Save'
 
         expect(page).to_not have_content question.body
         expect(page).to have_content 'edited question'
-        expect(page).to_not have_selector 'textarea'
+        expect(page).to_not have_selector 'textarea#question_body'
       end
     end
 
     scenario 'edits his question with errors', js: true do
       within '.question' do
         click_on 'Edit'
-        fill_in 'Body', with: ''
+        fill_in 'Your question', with: ''
         click_on 'Save'
-
         expect(page).to have_content question.body
       end
       within '.question-errors' do

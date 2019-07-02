@@ -24,7 +24,7 @@ RSpec.describe AnswersController, type: :controller do
         end
 
         it 'renders create-js' do
-          post :create, params: { answer: attributes_for(:answer), question_id: question }, format: :js
+          create_answer
           expect(response).to render_template :create
         end
       end

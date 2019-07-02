@@ -27,4 +27,13 @@ br
           = render 'shared/errors', resource: answer
       .row
         = render 'answers/hiddenaform', answer: answer
+      .row
+        .col class="col-xs-1"
+        .col class="col-xs-8"
+          .comments
+            p Comments:
+            = render answer.comments
+          .new-comment
+            = render partial: 'comments/form', locals: {resource: answer}
+        .col class="col-xs-3"
 br

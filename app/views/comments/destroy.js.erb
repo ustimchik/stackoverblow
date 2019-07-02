@@ -1,0 +1,5 @@
+$('.notice').html('<%= render 'shared/errors', resource: @comment %>');
+<% unless @comment.errors.present? %>
+  $('<%= "#comment-#{@comment.id}" %>').remove();
+  $('.notice').html('<%= j 'Comment was successfully deleted.' %>');
+<% end %>

@@ -24,7 +24,7 @@ feature 'User can see the newly added questions', %q{
       visit questions_path
       click_on 'Ask question'
       fill_in 'Title', with: 'Test question'
-      fill_in 'Body', with: 'Text of the question'
+      fill_in 'Your question', with: 'Text of the question'
       click_on 'Ask'
     end
 

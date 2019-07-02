@@ -1,0 +1,9 @@
+.comment id = 'comment-#{comment.id}'
+  p.comment-title comment created by #{comment.user.email} at #{comment.created_at.to_formatted_s(:short)}
+  p.comment-body= comment.body
+  - if current_user&.author_of?(comment)
+    .row
+    = link_to 'Edit', '#', class: 'edit-comment-link btn btn-link', data: {comment_id: comment.id}
+    = link_to 'Delete', comment, remote: true, method: :delete, class: 'btn btn-link'
+    .row
+      = render 'comments/hiddencform', comment: comment

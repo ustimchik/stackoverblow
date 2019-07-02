@@ -1,0 +1,5 @@
+$('.notice').html('<%= render 'shared/errors', resource: @comment %>');
+<% unless @comment.errors.present? %>
+  $('<%= "#comment-#{@comment.id}" %>').html('<%= j render @comment %>');
+  $('.notice').html('<%= j 'Comment was successfully updated.' %>');
+<% end %>

@@ -1,5 +1,5 @@
 = form_with model: [@question, @answer], class: 'new-answer', remote: true do |f|
-  = f.label :body
+  = f.label :body, 'New answer'
   = f.text_area :body
   = f.label :files
   = f.file_field :files, multiple: true

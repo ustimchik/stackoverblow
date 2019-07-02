@@ -14,7 +14,7 @@ feature 'User can add links to the answer', %q{
   before do
     sign_in(user)
     visit question_path(question)
-    fill_in 'Body', with: 'Answer text'
+    fill_in 'New answer', with: 'Answer text'
     click_on 'add link'
   end
 

@@ -1,0 +1,9 @@
+- body = @data['body']
+- comment_user_id = @data['user_id']
+- comment_id = @data['id']
+- user_email = @data['user_email']
+- created_at = @data['created_at']
+
+.comment id = 'comment-#{comment_id}'
+  p.comment-title = "comment created by #{user_email} at #{created_at}"
+  p.comment-body = body
