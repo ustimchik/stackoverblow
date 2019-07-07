@@ -7,12 +7,10 @@ class CommentsController < ApplicationController
 
   def create
     @comment = @commentable.comments.create(comment_params.merge(user: current_user))
-    @css = set_css
   end
 
   def update
     @comment.update(comment_params) if current_user.author_of?(@comment)
-    @css = set_css
   end
 
   def destroy
@@ -36,10 +34,6 @@ class CommentsController < ApplicationController
   def set_commentable
     @commentable = Question.find(params[:question_id]) if (params[:question_id]).present?
     @commentable = Answer.find(params[:answer_id]) if (params[:answer_id]).present?
-  end
-
-  def set_css
-    @commentable.instance_of?(Answer) && @commentable.best? ? ".answer-best" : ".#{@comment.commentable_type.downcase}"
   end
 
   def comment_params

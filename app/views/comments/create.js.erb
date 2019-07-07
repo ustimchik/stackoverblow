@@ -1,6 +1,8 @@
+<% css = @commentable.instance_of?(Answer) && @commentable.best? ? ".answer-best" : ".#{@comment.commentable_type.downcase}"%>
+
 $('.notice').html('<%= render 'shared/errors', resource: @comment %>');
 <% if @comment.persisted? %>
-  $('<%= @css %>').find('.comments').append('<%= j render @comment %>');
+  $('<%= css %>').find('.comments').append('<%= j render @comment %>');
   $('.new-comment #comment_body').val('');
   $('.notice').html('<%= j 'Comment was successfully added.' %>');
 <% end %>

@@ -24,11 +24,6 @@ RSpec.describe CommentsController, type: :controller do
           expect{create_comment}.to change(user.comments, :count).by(1)
         end
 
-        it 'sets proper css selector' do
-          create_comment
-          expect(assigns(:css)).to eq(".answer")
-        end
-
         it 'renders create-js' do
           create_comment
           expect(response).to render_template :create

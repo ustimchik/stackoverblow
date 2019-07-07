@@ -5,7 +5,7 @@ feature 'User can sign out', %q{
   As an authenticated user
   I'd like to be able to sign out
 } do
-  given(:user) { User.create!(email: 'user@test.com', password: '12345678') }
+  given(:user) { create :user }
 
   background do
     visit new_user_session_path
