@@ -7,14 +7,15 @@ feature 'User can get and view awards assigned to the question', %q{
 } do
 
 
+  given!(:question_owner) { create(:user) }
   given!(:user) { create(:user) }
   given!(:other_user) { create(:user) }
-  given!(:question) { create(:question, :with_award, user: user) }
+  given!(:question) { create(:question, :with_award, user: question_owner) }
   given!(:answer) { create(:answer, question: question, user: user) }
   given!(:other_answer) { create(:answer, question: question, user: other_user) }
 
   before do
-    sign_in user
+    sign_in question_owner
     visit question_path(question)
   end
 
@@ -23,7 +24,7 @@ feature 'User can get and view awards assigned to the question', %q{
       within "#answer-#{answer.id}" do
         click_on 'Mark Best'
       end
-      wait_for_ajax
+      sleep 1
     end
 
     scenario 'Authenticated answer owner gets the award', js: true do
@@ -41,14 +42,14 @@ feature 'User can get and view awards assigned to the question', %q{
       within "#answer-#{answer.id}" do
         click_on 'Mark Best'
       end
-      wait_for_ajax
+      sleep 1
     end
 
     scenario 'previous best answer owner is not able to see the award', js: true do
       within "#answer-#{other_answer.id}" do
         click_on 'Mark Best'
       end
-      wait_for_ajax
+      sleep 1
       visit user_path(user)
 
       within '.awards' do
@@ -61,7 +62,7 @@ feature 'User can get and view awards assigned to the question', %q{
       within "#answer-#{other_answer.id}" do
         click_on 'Mark Best'
       end
-      wait_for_ajax
+      sleep 1
       visit user_path(other_user)
 
       within '.awards' do
