@@ -56,9 +56,18 @@ RSpec.describe QuestionsController, type: :controller do
 
   describe 'GET #edit' do
 
-    context 'as logged on user' do
+    context 'as logged on user and NOT resource owner' do
       before { login(user) }
+      before { get :edit, params: {id: question_test} }
 
+      it 'redirects to root url due to cancan' do
+        expect(response).to redirect_to root_url
+      end
+    end
+
+    context 'as logged on user and resource owner' do
+      before { login(user) }
+      before { question_test.update(user: user) }
       before { get :edit, params: {id: question_test} }
 
       it 'assigns question with id from params to @question' do
@@ -176,8 +185,8 @@ RSpec.describe QuestionsController, type: :controller do
           expect(question_test.body).to eq 'Question body'
         end
 
-        it 'renders update js' do
-          expect(response).to render_template :update
+        it 'redirects to root url due to cancan' do
+          expect(response).to redirect_to root_url
         end
       end
     end
@@ -229,8 +238,8 @@ RSpec.describe QuestionsController, type: :controller do
           expect{delete_answer}.to_not change(Question, :count)
         end
 
-        it 'redirects to all questions' do
-          expect(delete_answer).to redirect_to question_test
+        it 'redirects to root url due to cancan' do
+          expect(delete_answer).to redirect_to root_url
         end
       end
 

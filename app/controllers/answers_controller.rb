@@ -14,15 +14,18 @@ class AnswersController < ApplicationController
   end
 
   def update
-    @answer.update(answer_params) if current_user.author_of?(@answer)
+    @answer.update(answer_params)
+    #@answer.update(answer_params) if current_user.author_of?(@answer)
   end
 
   def destroy
-    @answer.destroy if current_user.author_of?(@answer)
+    @answer.destroy
+    #@answer.destroy if current_user.author_of?(@answer)
   end
 
   def markbest
-    @answer.markbest if current_user.author_of?(@question)
+    @answer.markbest
+    #@answer.markbest if current_user.author_of?(@question)
   end
 
   private

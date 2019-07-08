@@ -98,8 +98,8 @@ RSpec.describe AnswersController, type: :controller do
           expect(answer_test.body).to eq answer_saved.body
         end
 
-        it 'renders update-js' do
-          expect(response).to render_template :update
+        it 'redirects to root url due to cancan' do
+          expect(response).to redirect_to root_url
         end
       end
     end
@@ -144,8 +144,8 @@ RSpec.describe AnswersController, type: :controller do
           expect{delete_answer}.to_not change(Answer, :count)
         end
 
-        it 'renders destroy template' do
-          expect(delete_answer).to render_template :destroy
+        it 'redirect to root_url due to cancan' do
+          expect(delete_answer).to redirect_to root_url
         end
       end
     end
@@ -200,8 +200,8 @@ RSpec.describe AnswersController, type: :controller do
           expect(answer_first.best).to be_falsey
         end
 
-        it 'renders markbest js' do
-          expect(response).to render_template :markbest
+        it 'redirects to root url due to cancan' do
+          expect(response).to redirect_to root_url
         end
       end
     end

@@ -4,11 +4,11 @@
     .col class="col-xs-1"
       .votescore
         p = "Votes: #{question.votescore}"
-      - if current_user&.author_of?(question)
+      - if can?(:update, question) && can?(:destroy, question)
         = link_to 'Edit', '#', class: 'edit-question-link btn btn-link', data: {question_id: question.id}
         = link_to 'Delete', question, remote: true, method: :delete, class: 'btn btn-link'
       - else
-        - if current_user
+        - if can?(:upvote, question)
           = render partial: 'common/votebuttons', locals: {parent_obj: question}
     .col class="col-xs-8"
       .row

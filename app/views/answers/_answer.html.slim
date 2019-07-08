@@ -5,13 +5,13 @@ br
         .col class="col-xs-1"
           .votescore
             p = "Votes: #{answer.votescore}"
-          - if current_user&.author_of?(answer)
+          - if can?(:update, answer) && can?(:destroy, answer)
             = link_to 'Edit', '#', class: 'edit-answer-link btn btn-link', data: { answer_id: answer.id }
             = link_to 'Delete', answer, remote: true, method: :delete, class: 'btn btn-link'
           - else
-            - if current_user
+            - if can?(:upvote, answer)
               = render partial: 'common/votebuttons', locals: {parent_obj: answer}
-          - if current_user&.author_of?(answer.question)
+          - if can?(:markbest, answer)
             = link_to 'Mark Best', markbest_answer_path(answer), method: :post, remote: true, class: 'btn btn-link'
         .col class="col-xs-8"
           - if answer.persisted?

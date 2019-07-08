@@ -79,7 +79,7 @@ RSpec.describe CommentsController, type: :controller do
           let!(:comment_saved) { comment.dup }
           before { patch :update, params: { id: comment, comment: attributes_for(:comment, :invalid)}, format: :js  }
 
-          it 'does not change answer' do
+          it 'does not change comment' do
             comment.reload
             expect(comment.body).to eq comment_saved.body
           end
@@ -90,17 +90,17 @@ RSpec.describe CommentsController, type: :controller do
         end
       end
 
-      context 'as NOT answer author' do
+      context 'as NOT comment author' do
         let!(:comment_saved) { comment.dup }
         before { patch :update, params: { id: comment, comment: attributes_for(:comment, :invalid)}, format: :js  }
 
-        it 'does not change answer' do
+        it 'does not change comment' do
           comment.reload
           expect(comment.body).to eq comment_saved.body
         end
 
-        it 'renders update-js' do
-          expect(response).to render_template :update
+        it 'redirects to root url due to cancan' do
+          expect(response).to redirect_to root_url
         end
       end
     end
@@ -109,7 +109,7 @@ RSpec.describe CommentsController, type: :controller do
       let!(:comment_saved) { comment.dup }
       before { patch :update, params: { id: comment, comment: attributes_for(:comment)}, format: :js }
 
-      it 'does not change answer' do
+      it 'does not change comment' do
         comment.reload
         expect(comment.body).to eq comment_saved.body
       end
@@ -144,8 +144,8 @@ RSpec.describe CommentsController, type: :controller do
           expect{delete_comment}.to_not change(Comment, :count)
         end
 
-        it 'renders destroy template' do
-          expect(delete_comment).to render_template :destroy
+        it 'redirects to root url due to cancan' do
+          expect(delete_comment).to redirect_to root_url
         end
       end
     end
