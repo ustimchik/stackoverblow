@@ -50,6 +50,7 @@ gem 'omniauth'
 gem 'omniauth-github'
 gem 'omniauth-twitter'
 gem 'capybara-email'
+gem 'cancancan'
 
 
 group :development, :test do

@@ -6,6 +6,8 @@ class AnswersController < ApplicationController
   before_action :set_question, only: [:update, :destroy, :markbest]
   after_action :stream_answer, only: [:create]
 
+  authorize_resource
+
   def create
     @question = Question.find(params[:question_id])
     @answer = current_user.answers.create(answer_params.merge(question: @question))

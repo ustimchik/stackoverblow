@@ -5,6 +5,8 @@ class CommentsController < ApplicationController
   before_action :set_commentable
   after_action :stream_comment, only: [:create]
 
+  authorize_resource
+
   def create
     @comment = @commentable.comments.create(comment_params.merge(user: current_user))
   end

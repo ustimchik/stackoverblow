@@ -2,6 +2,8 @@ class OauthCallbacksController < Devise::OmniauthCallbacksController
 
   before_action :social_network_login, only: [:github, :twitter, :send_confirmation]
 
+  skip_authorization_check
+
   def github
   end
 

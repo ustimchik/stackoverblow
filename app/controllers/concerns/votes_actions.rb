@@ -1,6 +1,8 @@
 module VotesActions
   extend ActiveSupport::Concern
 
+  authorize_resource
+
   included do
     before_action :set_item, only: [:upvote, :downvote, :clearvote]
   end

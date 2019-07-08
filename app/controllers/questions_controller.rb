@@ -5,6 +5,8 @@ class QuestionsController < ApplicationController
   before_action :set_question, only: [:show, :edit, :update, :destroy]
   after_action :stream_question, only: [:create]
 
+  authorize_resource
+
   def index
     @questions = Question.all
   end
