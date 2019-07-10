@@ -32,11 +32,8 @@ class Ability
     can :markbest, Answer do |answer|
       @user.author_of?(answer.question) && !@user.author_of?(answer)
     end
-    can [:upvote, :downvote], [Question, Answer] do |item|
+    can [:upvote, :downvote, :clearvote], [Question, Answer] do |item|
       !@user.author_of?(item)
-    end
-    can :clearvote, [Question, Answer] do |item|
-      item.votes.where(user: @user) && !@user.author_of?(item)
     end
   end
 end

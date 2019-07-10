@@ -2,7 +2,7 @@
 $(document).on('ajax:error', function (e) {
     var error = e.detail[2].status;
     var message = e.detail[0].error || e.detail[0];
-    if (error == 403 || 401 ) {
+    if (error == 403 || error == 401 ) {
         $('.notice').html(message);
         $('.notice').addClass('alert-danger');
     }
