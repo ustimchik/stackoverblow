@@ -12,11 +12,11 @@ class CommentsController < ApplicationController
   end
 
   def update
-    @comment.update(comment_params) if current_user.author_of?(@comment)
+    @comment.update(comment_params)
   end
 
   def destroy
-    @comment.destroy if current_user.author_of?(@comment)
+    @comment.destroy
   end
 
   private

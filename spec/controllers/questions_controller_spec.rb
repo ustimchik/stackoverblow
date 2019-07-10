@@ -60,8 +60,8 @@ RSpec.describe QuestionsController, type: :controller do
       before { login(user) }
       before { get :edit, params: {id: question_test} }
 
-      it 'redirects to root url due to cancan' do
-        expect(response).to redirect_to root_url
+      it 'does not render edit view' do
+        expect(response).to_not render_template :edit
       end
     end
 
@@ -84,6 +84,10 @@ RSpec.describe QuestionsController, type: :controller do
 
       it 'does not assign question with id from params to @question' do
         expect(assigns(:question)).to_not eq question_test
+      end
+
+      it 'does not render edit view' do
+        expect(response).to_not render_template :edit
       end
     end
 
@@ -185,8 +189,8 @@ RSpec.describe QuestionsController, type: :controller do
           expect(question_test.body).to eq 'Question body'
         end
 
-        it 'redirects to root url due to cancan' do
-          expect(response).to redirect_to root_url
+        it 'does not render update template' do
+          expect(response).to_not render_template :update
         end
       end
     end
@@ -238,8 +242,8 @@ RSpec.describe QuestionsController, type: :controller do
           expect{delete_answer}.to_not change(Question, :count)
         end
 
-        it 'redirects to root url due to cancan' do
-          expect(delete_answer).to redirect_to root_url
+        it 'does not redirect to all questions' do
+          expect(delete_answer).to_not redirect_to question_test
         end
       end
 

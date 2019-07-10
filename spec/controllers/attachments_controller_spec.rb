@@ -30,8 +30,8 @@ RSpec.describe AttachmentsController, type: :controller do
             expect{delete_attachment_question}.to_not change(ActiveStorage::Attachment, :count)
           end
 
-          it 'renders destroy template' do
-            expect(delete_attachment_question).to render_template :destroy
+          it 'does not render destroy template' do
+            expect(delete_attachment_question).to_not render_template :destroy
           end
         end
       end
@@ -53,8 +53,8 @@ RSpec.describe AttachmentsController, type: :controller do
             expect{delete_attachment_answer}.to_not change(ActiveStorage::Attachment, :count)
           end
 
-          it 'renders destroy template' do
-            expect(delete_attachment_answer).to render_template :destroy
+          it 'does not render destroy template' do
+            expect(delete_attachment_answer).to_not render_template :destroy
           end
         end
       end

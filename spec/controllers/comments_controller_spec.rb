@@ -99,8 +99,8 @@ RSpec.describe CommentsController, type: :controller do
           expect(comment.body).to eq comment_saved.body
         end
 
-        it 'redirects to root url due to cancan' do
-          expect(response).to redirect_to root_url
+        it 'does not render update template' do
+          expect(response).to_not render_template :update
         end
       end
     end
@@ -144,8 +144,8 @@ RSpec.describe CommentsController, type: :controller do
           expect{delete_comment}.to_not change(Comment, :count)
         end
 
-        it 'redirects to root url due to cancan' do
-          expect(delete_comment).to redirect_to root_url
+        it 'does not render destroy template' do
+          expect(delete_comment).to_not render_template :destroy
         end
       end
     end

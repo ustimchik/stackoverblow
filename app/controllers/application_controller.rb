@@ -6,7 +6,11 @@ class ApplicationController < ActionController::Base
   end
 
   rescue_from CanCan::AccessDenied do |exception|
-    redirect_to root_url, alert: exception.message
+    respond_to do |format|
+      format.js   { render json: { error: exception.message }, status: 403, content_type: 'application/json' }
+      format.html { redirect_to root_url, notice: exception.message, status: :not_found }
+      format.json   { render json: { error: exception.message }, status: 403, content_type: 'application/json' }
+    end
   end
 
   check_authorization unless: :devise_controller?

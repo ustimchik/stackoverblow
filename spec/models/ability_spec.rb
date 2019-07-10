@@ -32,6 +32,9 @@ RSpec.describe Ability do
     let(:comment) { create :comment, user: user, commentable: answer }
     let(:another_comment) { create :comment, user: another_user, commentable: answer }
 
+    let(:file) { create :file, user: user, attachable: answer }
+    let(:another_file) { create :file, user: another_user, attachable: answer }
+
 
     it { should_not be_able_to :manage, :all }
     it { should be_able_to :read, :all }
@@ -77,6 +80,17 @@ RSpec.describe Ability do
       it { should be_able_to :create, Comment }
       it { should be_able_to :update, comment }
       it { should_not be_able_to :update, another_comment }
+      it { should be_able_to :destroy, comment }
+      it { should_not be_able_to :destroy, another_comment }
+    end
+
+    context 'for files' do
+      let!(:answer_with_file) { create :answer, :with_attachment, user: user }
+      let!(:another_answer_with_file) { create :answer, :with_attachment, user: another_user }
+
+      it { should be_able_to :create, ActiveStorage::Attachment }
+      it { should be_able_to :destroy, answer_with_file.files.first }
+      it { should_not be_able_to :destroy, another_answer_with_file.files.first}
     end
   end
 end
