@@ -1,6 +1,8 @@
 class ApplicationController < ActionController::Base
   before_action :gon_user
 
+  protect_from_forgery unless: -> { request.format.json? }
+
   def gon_user
     gon.current_user_id = current_user.id if current_user
   end

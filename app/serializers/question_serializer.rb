@@ -1,6 +1,6 @@
 class QuestionSerializer < ActiveModel::Serializer
   attributes :id, :title, :body, :created_at, :updated_at, :short_title, :files
-  has_many :answers, each_serializer: AnswerSerializer
+  has_many :answers, serializer: AnswersCollectionSerializer
   has_many :comments
   belongs_to :user
   has_many :links
