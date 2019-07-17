@@ -1,9 +1,11 @@
 class Api::V1::QuestionsController < Api::V1::BaseController
   before_action :set_question, only: [:show, :update, :destroy]
 
+  authorize_resource
+
   def index
     @questions = Question.all
-    render json: @questions
+    render json: @questions, each_serializer: QuestionsCollectionSerializer
   end
 
   def show

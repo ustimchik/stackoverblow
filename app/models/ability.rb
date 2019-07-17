@@ -4,8 +4,8 @@ class Ability
 
   def initialize(user)
     @user = user
-    if user
-      user.admin? ? admin_abilities : user_abilities
+    if @user
+      @user.admin? ? admin_abilities : user_abilities
     else
       guest_abilities
     end
@@ -24,8 +24,8 @@ class Ability
   def user_abilities
     guest_abilities
     can :create, [Question, Answer, Comment, ActiveStorage::Attachment]
-    can :update, [Question, Answer, Comment], user_id: user.id
-    can :destroy, [Question, Answer, Comment], user_id: user.id
+    can :update, [Question, Answer, Comment], user_id: @user.id
+    can :destroy, [Question, Answer, Comment], user_id: @user.id
     can :destroy, ActiveStorage::Attachment do |attachment|
       @user.author_of?(attachment.record)
     end
@@ -35,5 +35,6 @@ class Ability
     can [:upvote, :downvote, :clearvote], [Question, Answer] do |item|
       !@user.author_of?(item)
     end
+    can :me, User, id: @user.id
   end
 end

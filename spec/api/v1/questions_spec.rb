@@ -5,15 +5,10 @@ describe 'Questions API', type: :request do
                    "ACCEPT" => 'application/json'} }
 
   describe 'GET /api/v1/questions' do
-    context 'unauthorized' do
-      it 'returns 401 status if there is no access_token' do
-        get '/api/v1/questions', headers: headers
-        expect(response.status).to eq 401
-      end
-      it 'returns 401 status if access_token is invalid' do
-        get '/api/v1/questions', params: { access_token: '3wqe2132r3' }, headers: headers
-        expect(response.status).to eq 401
-      end
+    it_behaves_like 'UnauthorizedApi'
+
+    def api_call( flex_params = {} )
+      get '/api/v1/questions', params: flex_params, headers: headers
     end
 
     context 'authorized' do
@@ -38,40 +33,16 @@ describe 'Questions API', type: :request do
           expect(question_response[attr]).to eq questions.first.send(attr).as_json
         end
       end
-
-      it 'contains user object' do
-        expect(question_response['user']['id']).to eq question.user.id
-      end
-
-      describe 'answers' do
-        let(:answer) { answers.first }
-        let(:answer_response) { question_response['answers'].first }
-
-        it 'returns list of answers' do
-          expect(question_response['answers'].size).to eq 3
-        end
-
-        it 'returns all public fields' do
-          %w[id body user_id created_at updated_at].each do |attr|
-            expect(answer_response[attr]).to eq answer.send(attr).as_json
-          end
-        end
-      end
     end
   end
 
   describe 'GET /api/v1/questions/question_id' do
     let!(:question) { create(:question, :with_attachment) }
 
-    context 'unauthorized' do
-      it 'returns 401 status if there is no access_token' do
-        get "/api/v1/questions/#{question.id}", headers: headers
-        expect(response.status).to eq 401
-      end
-      it 'returns 401 status if access_token is invalid' do
-        get "/api/v1/questions/#{question.id}", params: { access_token: '3wqe2132r3' }, headers: headers
-        expect(response.status).to eq 401
-      end
+    it_behaves_like 'UnauthorizedApi'
+
+    def api_call( flex_params = {} )
+      get "/api/v1/questions/#{question.id}", params: flex_params, headers: headers
     end
 
     context 'authorized' do
@@ -164,15 +135,10 @@ describe 'Questions API', type: :request do
   describe 'POST /api/v1/questions' do
     let(:question_params) { {title: "WHY?", body: "ON EARTH", links_attributes: {randkey: {name: "ya", url: "https://ya.ru"}}} }
 
-    context 'unauthorized' do
-      it 'returns 401 status if there is no access_token' do
-        post "/api/v1/questions", params: { question: question_params, headers: headers }
-        expect(response.status).to eq 401
-      end
-      it 'returns 401 status if access_token is invalid' do
-        post "/api/v1/questions", params: { question: question_params, headers: headers, access_token: '123213214'}
-        expect(response.status).to eq 401
-      end
+    it_behaves_like 'UnauthorizedApi'
+
+    def api_call( flex_params = {} )
+      post '/api/v1/questions/', params: {headers: headers}.merge(question_params).merge(flex_params)
     end
 
     context 'authorized' do
@@ -205,31 +171,46 @@ describe 'Questions API', type: :request do
     let!(:question) { create(:question) }
     let(:question_params) { {title: "WHY?", body: "ON EARTH", links_attributes: {randkey: {name: "ya", url: "https://ya.ru"}}} }
 
-    context 'unauthorized' do
-      it 'returns 401 status if there is no access_token' do
-        patch "/api/v1/questions/#{question.id}", params: { question: question_params, headers: headers }
-        expect(response.status).to eq 401
-      end
-      it 'returns 401 status if access_token is invalid' do
-        patch "/api/v1/questions/#{question.id}", params: { question: question_params, headers: headers, access_token: '123213214'}
-        expect(response.status).to eq 401
-      end
+    it_behaves_like 'UnauthorizedApi'
+
+    def api_call( flex_params = {} )
+      patch "/api/v1/questions/#{question.id}", params: {headers: headers}.merge(question_params).merge(flex_params)
     end
 
     context 'authorized' do
-      let(:access_token) { create(:access_token) }
+      context 'as resource owner' do
+        let(:user) {create :user}
+        let!(:question) {create :question, user: user}
+        let(:access_token) { create(:access_token, resource_owner_id: user.id) }
 
-      before { patch "/api/v1/questions/#{question.id}", params: { question: question_params, headers: headers, access_token: access_token.token} }
+        before { patch "/api/v1/questions/#{question.id}", params: { question: question_params, headers: headers, access_token: access_token.token} }
 
-      it 'returns OK status' do
-        expect(response).to be_successful
+        it 'returns OK status' do
+          expect(response).to be_successful
+        end
+
+        it 'is able to get the updated record by id with the new values' do
+          get "/api/v1/questions/#{question.id}", params: { access_token: access_token.token, headers: headers }
+          expect(response.status).to eq 200
+          expect(JSON.parse(response.body)['question']['title']).to eq "WHY?"
+          expect(JSON.parse(response.body)['question']['body']).to eq "ON EARTH"
+        end
       end
 
-      it 'is able to get the new record by id with the new values' do
-        get "/api/v1/questions/#{question.id}", params: { access_token: access_token.token, headers: headers }
-        expect(response.status).to eq 200
-        expect(JSON.parse(response.body)['question']['title']).to eq "WHY?"
-        expect(JSON.parse(response.body)['question']['body']).to eq "ON EARTH"
+      context 'as NOT resource owner' do
+        let(:access_token) { create(:access_token) }
+
+        before { patch "/api/v1/questions/#{question.id}", params: { question: question_params, headers: headers, access_token: access_token.token} }
+
+        it 'returns failed status' do
+          expect(response).to_not be_successful
+        end
+
+        it 'is not getting updated values from the record' do
+          get "/api/v1/questions/#{question.id}", params: { access_token: access_token.token, headers: headers }
+          expect(JSON.parse(response.body)['question']['title']).to_not eq "WHY?"
+          expect(JSON.parse(response.body)['question']['body']).to_not eq "ON EARTH"
+        end
       end
     end
   end
@@ -237,29 +218,43 @@ describe 'Questions API', type: :request do
   describe 'DELETE /api/v1/questions/question_id' do
     let!(:question) { create(:question) }
 
-    context 'unauthorized' do
-      it 'returns 401 status if there is no access_token' do
-        delete "/api/v1/questions/#{question.id}", params: { headers: headers }
-        expect(response.status).to eq 401
-      end
-      it 'returns 401 status if access_token is invalid' do
-        delete "/api/v1/questions/#{question.id}", params: { headers: headers, access_token: '123213214'}
-        expect(response.status).to eq 401
-      end
+    it_behaves_like 'UnauthorizedApi'
+
+    def api_call( flex_params = {} )
+      delete "/api/v1/questions/#{question.id}", params: {headers: headers}.merge(flex_params)
     end
 
     context 'authorized' do
-      let(:access_token) { create(:access_token) }
+      context 'as resource owner' do
+        let(:user) {create :user}
+        let!(:question) {create :question, user: user}
+        let(:access_token) { create(:access_token, resource_owner_id: user.id) }
 
-      before { delete "/api/v1/questions/#{question.id}", params: { headers: headers, access_token: access_token.token} }
+        before { delete "/api/v1/questions/#{question.id}", params: { headers: headers, access_token: access_token.token} }
 
-      it 'returns OK status' do
-        expect(response).to be_successful
+        it 'returns OK status' do
+          expect(response).to be_successful
+        end
+
+        it 'is NOT able to get the record by id after delete' do
+          get "/api/v1/questions/#{question.id}", params: { access_token: access_token.token, headers: headers }
+          expect(response).to_not be_successful
+        end
       end
 
-      it 'is NOT able to get the new record by id' do
-        get "/api/v1/questions/#{question.id}", params: { access_token: access_token.token, headers: headers }
-        expect(response).to_not be_successful
+      context 'as NOT resource owner' do
+        let(:access_token) { create(:access_token) }
+
+        before { delete "/api/v1/questions/#{question.id}", params: { headers: headers, access_token: access_token.token} }
+
+        it 'returns failed status' do
+          expect(response).to_not be_successful
+        end
+
+        it 'is able to get the record by id after trying to delete' do
+          get "/api/v1/questions/#{question.id}", params: { access_token: access_token.token, headers: headers }
+          expect(response).to be_successful
+        end
       end
     end
   end

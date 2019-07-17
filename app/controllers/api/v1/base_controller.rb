@@ -3,7 +3,9 @@ class Api::V1::BaseController < ApplicationController
 
   rescue_from ActiveRecord::RecordNotFound, with: :handle_not_found
 
-  skip_authorization_check
+  def current_user
+    current_resource_owner
+  end
 
   private
 

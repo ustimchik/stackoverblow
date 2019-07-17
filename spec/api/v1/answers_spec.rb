@@ -7,15 +7,10 @@ describe 'Answers API', type: :request do
   describe 'GET /api/v1/questions/question_id/answers' do
     let!(:question) { create(:question_with_answers, answers_count: 3) }
 
-    context 'unauthorized' do
-      it 'returns 401 status if there is no access_token' do
-        get "/api/v1/questions/#{question.id}/answers", headers: headers
-        expect(response.status).to eq 401
-      end
-      it 'returns 401 status if access_token is invalid' do
-        get "/api/v1/questions/#{question.id}/answers", params: { access_token: '3wqe2132r3' }, headers: headers
-        expect(response.status).to eq 401
-      end
+    it_behaves_like 'UnauthorizedApi'
+
+    def api_call( flex_params = {} )
+      get "/api/v1/questions/#{question.id}/answers", params: flex_params, headers: headers
     end
 
     context 'authorized' do
@@ -44,15 +39,10 @@ describe 'Answers API', type: :request do
   describe 'GET /api/v1/answers/answer_id' do
     let!(:answer) { create(:answer, :with_attachment) }
 
-    context 'unauthorized' do
-      it 'returns 401 status if there is no access_token' do
-        get "/api/v1/answers/#{answer.id}", headers: headers
-        expect(response.status).to eq 401
-      end
-      it 'returns 401 status if access_token is invalid' do
-        get "/api/v1/answers/#{answer.id}", params: { access_token: '3wqe2132r3' }, headers: headers
-        expect(response.status).to eq 401
-      end
+    it_behaves_like 'UnauthorizedApi'
+
+    def api_call( flex_params = {} )
+      get "/api/v1/answers/#{answer.id}", params: flex_params, headers: headers
     end
 
     context 'authorized' do
@@ -130,15 +120,10 @@ describe 'Answers API', type: :request do
     let!(:question) { create :question }
     let(:answer_params) { {body: "answer test", links_attributes: {randkey: {name: "ya", url: "https://ya.ru"}}} }
 
-    context 'unauthorized' do
-      it 'returns 401 status if there is no access_token' do
-        post "/api/v1/questions/#{question.id}/answers", params: { question: question, answer: answer_params, headers: headers }
-        expect(response.status).to eq 401
-      end
-      it 'returns 401 status if access_token is invalid' do
-        post "/api/v1/questions/#{question.id}/answers", params: { question: question, answer: answer_params, headers: headers, access_token: '123213214'}
-        expect(response.status).to eq 401
-      end
+    it_behaves_like 'UnauthorizedApi'
+
+    def api_call( flex_params = {} )
+      post "/api/v1/questions/#{question.id}/answers", params: {headers: headers}.merge(answer_params).merge(flex_params)
     end
 
     context 'authorized' do
@@ -171,30 +156,43 @@ describe 'Answers API', type: :request do
     let!(:answer) { create(:answer, question: question) }
     let(:answer_params) { {body: "answer test", links_attributes: {randkey: {name: "ya", url: "https://ya.ru"}}} }
 
-    context 'unauthorized' do
-      it 'returns 401 status if there is no access_token' do
-        patch "/api/v1/answers/#{answer.id}", params: { question: question, answer: answer_params, headers: headers }
-        expect(response.status).to eq 401
-      end
-      it 'returns 401 status if access_token is invalid' do
-        patch "/api/v1/answers/#{answer.id}", params: { question: question, answer: answer_params, headers: headers, access_token: '123213214'}
-        expect(response.status).to eq 401
-      end
+    it_behaves_like 'UnauthorizedApi'
+
+    def api_call( flex_params = {} )
+      patch "/api/v1/answers/#{answer.id}", params: {headers: headers}.merge(answer_params).merge(flex_params)
     end
 
     context 'authorized' do
-      let(:access_token) { create(:access_token) }
+      context 'as resource owner' do
+        let(:user) { create(:user) }
+        let!(:access_token) { create(:access_token, resource_owner_id: user.id) }
+        let!(:answer) { create(:answer, question: question, user: user) }
 
-      before { patch "/api/v1/answers/#{answer.id}", params: { question: question, answer: answer_params, headers: headers, access_token: access_token.token} }
+        before { patch "/api/v1/answers/#{answer.id}", params: { question: question, answer: answer_params, headers: headers, access_token: access_token.token} }
 
-      it 'returns OK status' do
-        expect(response).to be_successful
+        it 'returns OK status' do
+          expect(response).to be_successful
+        end
+
+        it 'is able to get the updated record with the new values' do
+          get "/api/v1/answers/#{answer.id}", params: { access_token: access_token.token, headers: headers }
+          expect(JSON.parse(response.body)['answer']['body']).to eq "answer test"
+        end
       end
 
-      it 'is able to get the new record by id with the new values' do
-        get "/api/v1/answers/#{answer.id}", params: { access_token: access_token.token, headers: headers }
-        expect(response.status).to eq 200
-        expect(JSON.parse(response.body)['answer']['body']).to eq "answer test"
+      context 'as NOT resource owner' do
+        let!(:access_token) { create(:access_token) }
+
+        before { patch "/api/v1/answers/#{answer.id}", params: { question: question, answer: answer_params, headers: headers, access_token: access_token.token} }
+
+        it 'returns failed status' do
+          expect(response).to_not be_successful
+        end
+
+        it 'is not updating the record attributes' do
+          get "/api/v1/answers/#{answer.id}", params: { access_token: access_token.token, headers: headers }
+          expect(JSON.parse(response.body)['answer']['body']).to_not eq "answer test"
+        end
       end
     end
   end
@@ -202,31 +200,44 @@ describe 'Answers API', type: :request do
   describe 'DELETE /api/v1/answers/answer_id' do
     let!(:answer) { create(:answer) }
 
-    context 'unauthorized' do
-      it 'returns 401 status if there is no access_token' do
-        delete "/api/v1/answers/#{answer.id}", params: { headers: headers }
-        expect(response.status).to eq 401
-      end
-      it 'returns 401 status if access_token is invalid' do
-        delete "/api/v1/answers/#{answer.id}", params: { headers: headers, access_token: '123213214'}
-        expect(response.status).to eq 401
-      end
+    it_behaves_like 'UnauthorizedApi'
+
+    def api_call( flex_params = {} )
+      delete "/api/v1/answers/#{answer.id}", params: {headers: headers}.merge(flex_params)
     end
 
     context 'authorized' do
-      let(:access_token) { create(:access_token) }
+      context 'as resource owner' do
+        let(:user) { create(:user) }
+        let!(:access_token) { create(:access_token, resource_owner_id: user.id) }
+        let!(:answer) { create(:answer, user: user) }
 
-      before { delete "/api/v1/answers/#{answer.id}", params: { headers: headers, access_token: access_token.token} }
+        before { delete "/api/v1/answers/#{answer.id}", params: { headers: headers, access_token: access_token.token} }
 
-      it 'returns OK status' do
-        expect(response).to be_successful
+        it 'returns OK status' do
+          expect(response).to be_successful
+        end
+
+        it 'is NOT able to get the new record by id' do
+          get "/api/v1/answers/#{answer.id}", params: { access_token: access_token.token, headers: headers }
+          expect(response).to_not be_successful
+        end
       end
 
-      it 'is NOT able to get the new record by id' do
-        get "/api/v1/answers/#{answer.id}", params: { access_token: access_token.token, headers: headers }
-        expect(response).to_not be_successful
+      context 'as NOT resource owner' do
+        let(:access_token) { create(:access_token) }
+
+        before { delete "/api/v1/answers/#{answer.id}", params: { headers: headers, access_token: access_token.token} }
+
+        it 'returns failed status' do
+          expect(response).to_not be_successful
+        end
+
+        it 'is able to get the new record by id' do
+          get "/api/v1/answers/#{answer.id}", params: { access_token: access_token.token, headers: headers }
+          expect(response).to be_successful
+        end
       end
     end
   end
-
 end
