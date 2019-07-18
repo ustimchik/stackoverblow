@@ -14,15 +14,23 @@ class Api::V1::QuestionsController < Api::V1::BaseController
 
   def create
     @question = current_resource_owner.questions.create(question_params)
-    render json: { question_id: @question.id }, status: :created, content_type: 'application/json' if @question.save
+    if @question.save
+      render json: { question_id: @question.id }, status: :created, content_type: 'application/json'
+    else
+      render json: { error: @question.errors }, status: :unprocessable_entity
+    end
   end
 
   def update
-    head :ok if @question.update(question_params)
+    if @question.update(question_params)
+      head :ok
+    else
+      render json: { error: @question.errors }, status: :unprocessable_entity
+    end
   end
 
   def destroy
-    head :ok if @question.destroy
+    @question.destroy
   end
 
   private

@@ -129,25 +129,42 @@ describe 'Answers API', type: :request do
     context 'authorized' do
       let(:access_token) { create(:access_token) }
 
-      before { post "/api/v1/questions/#{question.id}/answers", params: { question: question, answer: answer_params, headers: headers, access_token: access_token.token} }
+      context 'with no errors' do
+        before { post "/api/v1/questions/#{question.id}/answers", params: { question: question, answer: answer_params, headers: headers, access_token: access_token.token} }
 
-      it 'returns 201 status' do
-        expect(response.status).to eq 201
+        it 'returns 201 status' do
+          expect(response.status).to eq 201
+        end
+
+        it 'returns question ID' do
+          expect(json).to have_key('answer_id')
+        end
+
+        it 'adds a new record to Answer table' do
+          expect{post "/api/v1/questions/#{question.id}/answers", params: { question: question, answer: answer_params, headers: headers, access_token: access_token.token} }.to change{Answer.count}.by(1)
+        end
+
+        it 'is able to get the new record by id with proper values' do
+          get "/api/v1/answers/#{(json)['answer_id']}", params: { access_token: access_token.token, headers: headers }
+          expect(response.status).to eq 200
+          expect(JSON.parse(response.body)['answer']['body']).to eq "answer test"
+        end
       end
 
-      it 'returns question ID' do
-        expect(json).to have_key('answer_id')
+      context 'with errors' do
+        let(:answer_params) { {body: ""} }
+
+        before { post "/api/v1/questions/#{question.id}/answers", params: { question: question, answer: answer_params, headers: headers, access_token: access_token.token} }
+
+        it 'returns 422 status' do
+          expect(response.status).to eq 422
+        end
+
+        it 'does not add a new record to Answer table' do
+          expect{post "/api/v1/questions/#{question.id}/answers", params: { question: question, answer: answer_params, headers: headers, access_token: access_token.token} }.to_not change{Answer.count}
+        end
       end
 
-      it 'adds a new record to Answer table' do
-        expect{post "/api/v1/questions/#{question.id}/answers", params: { question: question, answer: answer_params, headers: headers, access_token: access_token.token} }.to change{Answer.count}.by(1)
-      end
-
-      it 'is able to get the new record by id with proper values' do
-        get "/api/v1/answers/#{(json)['answer_id']}", params: { access_token: access_token.token, headers: headers }
-        expect(response.status).to eq 200
-        expect(JSON.parse(response.body)['answer']['body']).to eq "answer test"
-      end
     end
   end
 
@@ -168,16 +185,34 @@ describe 'Answers API', type: :request do
         let!(:access_token) { create(:access_token, resource_owner_id: user.id) }
         let!(:answer) { create(:answer, question: question, user: user) }
 
-        before { patch "/api/v1/answers/#{answer.id}", params: { question: question, answer: answer_params, headers: headers, access_token: access_token.token} }
+        context 'with no errors' do
+          before { patch "/api/v1/answers/#{answer.id}", params: { question: question, answer: answer_params, headers: headers, access_token: access_token.token} }
 
-        it 'returns OK status' do
-          expect(response).to be_successful
+          it 'returns OK status' do
+            expect(response).to be_successful
+          end
+
+          it 'is able to get the updated record with the new values' do
+            get "/api/v1/answers/#{answer.id}", params: { access_token: access_token.token, headers: headers }
+            expect(JSON.parse(response.body)['answer']['body']).to eq "answer test"
+          end
         end
 
-        it 'is able to get the updated record with the new values' do
-          get "/api/v1/answers/#{answer.id}", params: { access_token: access_token.token, headers: headers }
-          expect(JSON.parse(response.body)['answer']['body']).to eq "answer test"
+        context 'with errors' do
+          let(:answer_params) { {body: ""} }
+
+          before { patch "/api/v1/answers/#{answer.id}", params: { question: question, answer: answer_params, headers: headers, access_token: access_token.token} }
+
+          it 'returns OK status' do
+            expect(response).to_not be_successful
+          end
+
+          it 'does not update the record with the new values' do
+            get "/api/v1/answers/#{answer.id}", params: { access_token: access_token.token, headers: headers }
+            expect(JSON.parse(response.body)['answer']['body']).to_not eq ""
+          end
         end
+
       end
 
       context 'as NOT resource owner' do

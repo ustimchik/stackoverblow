@@ -14,15 +14,23 @@ class Api::V1::AnswersController < Api::V1::BaseController
 
   def create
     @answer = current_resource_owner.answers.create(answer_params.merge(question: @question))
-    render json: { answer_id: @answer.id }, status: :created, content_type: 'application/json' if @answer.save
+    if @answer.save
+      render json: { answer_id: @answer.id }, status: :created
+    else
+      render json: { error: @answer.errors }, status: :unprocessable_entity
+    end
   end
 
   def update
-    head :ok if @answer.update(answer_params)
+    if @answer.update(answer_params)
+      head :ok
+    else
+      render json: { error: @answer.errors }, status: :unprocessable_entity
+    end
   end
 
   def destroy
-    head :ok if @answer.destroy
+    @answer.destroy
   end
 
   private
