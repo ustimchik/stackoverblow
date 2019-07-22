@@ -1,0 +1,8 @@
+h1 A new answer was added:
+p = @greeting
+p = "You have subscribed to the answers for the following question on stackoverblow:"
+p = @answer.question.title
+p = "User #{@answer.user} has just added a new answer to this question:"
+p = @answer.body
+p = "Would you like to discuss this?"
+= link_to "Yes, I'd like to", question_url(@answer.question)

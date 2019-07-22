@@ -40,12 +40,10 @@ feature 'User can create comments', %q{
     end
 
     context 'As unauthenticated user', js: true do
-      scenario 'creation fails' do
+      scenario 'does not see your comment field' do
         visit question_path(question)
-        fill_in 'Your comment', with: 'Text of the comment'
-        click_on 'Submit comment'
 
-        expect(page).to_not have_content 'Text of the comment'
+        expect(page).to_not have_field 'Your comment'
       end
     end
 
@@ -85,18 +83,13 @@ feature 'User can create comments', %q{
     end
 
     context 'As unauthenticated user', js: true do
-      scenario 'creation fails' do
+      scenario 'does not see your comment field' do
         visit question_path(question)
 
         within "#answer-#{answer.id}" do
-          fill_in 'Your comment', with: 'Text of the comment'
-          click_on 'Submit comment'
-
-          expect(page).to_not have_content 'Text of the comment'
+          expect(page).to_not have_field 'Your comment'
         end
       end
     end
-
   end
-
 end

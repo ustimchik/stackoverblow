@@ -1,5 +1,5 @@
 $('.question-errors').html('<%= render 'shared/errors', resource: @question %>');
-<% if !@question.errors.present? %>
+<% unless @question.errors.present? %>
   $('.question').html('<%= j render @question %>');
   $('.question').append('<%= j render partial: 'questions/hiddenqform' %>');
   $('.notice').html('<%= j 'Question was successfully updated.' %>');

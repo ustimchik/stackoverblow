@@ -11,5 +11,5 @@
 
 .answers
   = render @question.answers.not_best
-
-= render 'answers/form'
+- if can?(:create, Answer)
+  = render 'answers/form'

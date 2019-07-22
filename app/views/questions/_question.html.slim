@@ -1,5 +1,6 @@
 .container
   - question = @question || question
+  - subscription = current_user&.subscription_for(question)
   .row
     .col class="col-xs-1"
       .votescore
@@ -10,6 +11,10 @@
       - else
         - if can?(:upvote, question)
           = render partial: 'common/votebuttons', locals: {parent_obj: question}
+      - if subscription
+        = link_to 'Unsubscribe', subscription, remote: true, method: :delete, class: 'btn btn-link subscribe'
+      - elsif can?(:create, Subscription)
+        = link_to 'Subscribe', question_subscriptions_path(question), remote: true, method: :post, class: 'btn btn-link subscribe'
     .col class="col-xs-8"
       .row
         .col class="col-xs-8"
@@ -32,7 +37,6 @@
       .comments
         p Comments:
         = render question.comments
-      .new-comment
         = render partial: 'comments/form', locals: {resource: question}
     .col class="col-xs-3"
 br

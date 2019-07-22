@@ -92,5 +92,14 @@ RSpec.describe Ability do
       it { should be_able_to :destroy, answer_with_file.files.first }
       it { should_not be_able_to :destroy, another_answer_with_file.files.first}
     end
+
+    context 'for subscription' do
+      let!(:subscription) { create :subscription, user: user, question: question }
+      let!(:another_subscription) { create :subscription, user: another_user, question: question }
+
+      it { should be_able_to :create, Subscription }
+      it { should be_able_to :destroy, subscription }
+      it { should_not be_able_to :destroy, another_subscription }
+    end
   end
 end

@@ -1,0 +1,11 @@
+h1 Daily Digest
+p = @greeting
+- if @daily_questions&.empty?
+  p = "No new questions were created for the past day"
+- else
+  p = "Here are the new questions created for the past day:"
+  - @daily_questions.each do |question|
+    ul
+      li = link_to "#{question.title}", question_url(question)
+p = "Would you like to ask something?"
+= link_to "Yes, I'd like to ask for the community help", new_question_url

@@ -11,6 +11,7 @@ class AnswersController < ApplicationController
   def create
     @question = Question.find(params[:question_id])
     @answer = current_user.answers.create(answer_params.merge(question: @question))
+    send_notification if @answer.save
   end
 
   def update
@@ -47,5 +48,9 @@ class AnswersController < ApplicationController
 
   def answer_params
     params.require(:answer).permit(:title, :body, files: [], links_attributes: [:id, :name, :url, :_destroy])
+  end
+
+  def send_notification
+    QuestionsUpdatesJob.perform_later(@answer)
   end
 end

@@ -134,7 +134,7 @@ RSpec.describe AnswersController, type: :controller do
           expect{delete_answer}.to change(Answer, :count).by(-1)
         end
 
-        it 'redirects to previously stored @question' do
+        it 'renders destroy template' do
           expect(delete_answer).to render_template :destroy
         end
       end
@@ -144,7 +144,7 @@ RSpec.describe AnswersController, type: :controller do
           expect{delete_answer}.to_not change(Answer, :count)
         end
 
-        it 'does not render update template' do
+        it 'does not render destroy template' do
           expect(delete_answer).to_not render_template :destroy
         end
       end

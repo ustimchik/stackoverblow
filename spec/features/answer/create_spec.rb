@@ -47,10 +47,8 @@ feature 'User can create answer', %q{
   context 'Unauthenticated user', js: true do
     scenario 'asks a question' do
       visit question_path(question)
-      fill_in 'New answer', with: 'Text of the answer'
-      click_on 'Answer'
 
-      expect(page).to_not have_content 'Text of the answer'
+      expect(page).to_not have_field 'New answer'
     end
   end
 

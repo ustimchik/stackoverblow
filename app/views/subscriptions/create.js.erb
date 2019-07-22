@@ -1,0 +1,5 @@
+$('.notice').html('<%= render 'shared/errors', resource: @subscription %>');
+<% if @subscription.persisted? %>
+  $('a.btn.btn-link.subscribe').html('Unsubscribe');
+  $('.notice').html('<%= j 'Subscribed successfully .' %>');
+<% end %>

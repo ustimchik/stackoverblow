@@ -1,4 +1,6 @@
-= form_with model: [resource, Comment], class: 'new-comment', remote: true do |f|
-  = f.label :body, 'Your comment'
-  = f.text_area :body
-  = f.submit 'Submit comment'
+.new-comment
+  - if can?(:create, Comment)
+    = form_with model: [resource, Comment], class: 'new-comment', remote: true do |f|
+      = f.label :body, 'Your comment'
+      = f.text_area :body
+      = f.submit 'Submit comment'
