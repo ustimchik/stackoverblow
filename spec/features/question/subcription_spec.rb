@@ -6,8 +6,9 @@ feature 'User can subscribe for question', %q{
   I'd like to be able to subscribe to a question
 } do
 
+  given(:author) { create(:user) }
   given(:user) { create(:user) }
-  given!(:question) { create(:question, user: user) }
+  given!(:question) { create(:question, user: author) }
 
   scenario 'Unauthenticated user does not see subscribe/unsubscribe button' do
     visit questions_path(question)

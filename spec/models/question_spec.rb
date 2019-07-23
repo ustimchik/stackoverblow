@@ -24,4 +24,28 @@ RSpec.describe Question, type: :model do
     it_behaves_like "Voteable Model"
   end
 
+  describe 'subscribe' do
+    let(:user) { create(:user) }
+    let!(:question) { create(:question) }
+
+    it 'creates a new subscription' do
+      expect{ question.subscribe(user) }.to change(Subscription, :count).by(1)
+    end
+
+    it 'associates subscription with a given question' do
+      expect{ question.subscribe(user) }.to change(question.subscriptions, :count).by(1)
+    end
+
+    it 'associates subscription with a given user' do
+      expect{ question.subscribe(user) }.to change(user.subscriptions, :count).by(1)
+    end
+
+    context 'as callback after create' do
+      subject { build(:question, user: user) }
+
+      it 'subscribes author after creating a new object' do
+        expect{ (subject.save!) }.to change(user.subscriptions, :count).by(1)
+      end
+    end
+  end
 end

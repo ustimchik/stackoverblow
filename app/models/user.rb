@@ -17,9 +17,7 @@ class User < ApplicationRecord
   end
 
   def subscription_for(question)
-    subscription = self.subscriptions.where(question: question)
-    return subscription.first if subscription.any?
-    false
+    subscriptions.where(question: question).first
   end
 
   def self.find_for_oauth(auth)

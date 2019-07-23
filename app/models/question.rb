@@ -16,4 +16,10 @@ class Question < ApplicationRecord
   accepts_nested_attributes_for :award, reject_if: :all_blank, allow_destroy: true
 
   validates :title, :body, presence: true
+
+  after_create -> {subscribe(self.user)}
+
+  def subscribe(user)
+    self.subscriptions.create(user: user)
+  end
 end

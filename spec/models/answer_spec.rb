@@ -67,4 +67,13 @@ RSpec.describe Answer, type: :model do
     let!(:voteable_item) { create(:answer) }
     it_behaves_like "Voteable Model"
   end
+
+  describe '.send_notification' do
+    subject { build(:answer, user: user, question: question) }
+
+    it 'sends_notification after creating a new object' do
+      expect(QuestionsUpdatesJob).to receive(:perform_later).with(subject)
+      subject.save!
+    end
+  end
 end

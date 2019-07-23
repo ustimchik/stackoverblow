@@ -14,6 +14,8 @@ class Answer < ApplicationRecord
   validates :body, presence: true
   validates :best, uniqueness: { scope: :question_id }, if: :best?
 
+  after_create :send_notification
+
   scope :best, -> { where(best: true) }
   scope :not_best, -> { where(best: false) }
 
@@ -23,5 +25,11 @@ class Answer < ApplicationRecord
       update!(best: true)
       question.award.update!(user: self.user) if question.award
     end
+  end
+
+  private
+
+  def send_notification
+    QuestionsUpdatesJob.perform_later(self)
   end
 end

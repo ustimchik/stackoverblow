@@ -4,7 +4,7 @@ RSpec.describe SubscriptionsController, type: :controller do
 
   describe 'POST #create' do
     let (:user) { create(:user) }
-    let (:question) { create(:question) }
+    let!(:question) { create(:question) }
     let(:subscribe) { post :create, params: { question_id: question, subscription: attributes_for(:subscription)}, format: :js }
 
     context 'authorized' do
@@ -100,8 +100,8 @@ RSpec.describe SubscriptionsController, type: :controller do
         it 'does not change the subscriptions associated with the given question' do
           expect{(unsubscribe)}.to_not change(question.subscriptions, :count)
         end
-        it 'renders destroy template' do
-          expect(unsubscribe).to render_template :destroy
+        it 'does not render destroy template' do
+          expect(unsubscribe).to_not render_template :destroy
         end
       end
     end

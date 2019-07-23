@@ -46,8 +46,8 @@ RSpec.describe User, type: :model do
       expect(user.subscription_for(question)).to eq subscription
     end
 
-    it 'returns false when subscription for the provided question does not exist' do
-      expect(other_user.subscription_for(question)).to be false
+    it 'returns nil when subscription for the provided question does not exist' do
+      expect(other_user.subscription_for(question)).to be_falsey
     end
   end
 end

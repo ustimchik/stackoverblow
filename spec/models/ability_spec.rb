@@ -94,6 +94,7 @@ RSpec.describe Ability do
     end
 
     context 'for subscription' do
+      let(:question) { create :question }
       let!(:subscription) { create :subscription, user: user, question: question }
       let!(:another_subscription) { create :subscription, user: another_user, question: question }
 
