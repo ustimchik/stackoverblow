@@ -9,7 +9,7 @@ RSpec.describe Services::QuestionUpdates, type: :job do
   it 'sends new answer notification to subscribed users' do
     users.each do |user|
       question.subscribe(user)
-      expect(QuestionUpdatesMailer).to receive(:send_new_answer).with(user, answer)
+      expect(QuestionUpdatesMailer).to receive(:send_new_answer).with(user, answer).and_call_original
     end
     subject.send_new_answer(answer)
   end
