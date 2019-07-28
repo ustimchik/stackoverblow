@@ -9,7 +9,7 @@ class ApplicationController < ActionController::Base
     respond_to do |format|
       format.js   { render json: { error: exception.message }, status: 403, content_type: 'application/json' }
       format.html { redirect_to root_url, notice: exception.message, status: :not_found }
-      format.json   { render json: { error: exception.message }, status: 403, content_type: 'application/json' }
+      format.json { render json: { error: exception.message }, status: 403, content_type: 'application/json' }
     end
   end
 

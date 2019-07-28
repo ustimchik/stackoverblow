@@ -1,1 +1,7 @@
 .hidden { display: none }
+
+.search {
+    float: right;
+    font-size: 14px;
+    padding: 5px
+}
