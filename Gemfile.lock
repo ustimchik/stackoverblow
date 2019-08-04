@@ -188,7 +188,7 @@ GEM
       tilt
     letter_opener (1.7.0)
       launchy (~> 2.2)
-    libv8 (3.16.14.19-x86_64-linux)
+    libv8 (3.16.14.19)
     listen (3.1.5)
       rb-fsevent (~> 0.9, >= 0.9.4)
       rb-inotify (~> 0.9, >= 0.9.7)
@@ -244,7 +244,8 @@ GEM
     orm_adapter (0.5.0)
     pg (1.1.4)
     public_suffix (3.1.1)
-    puma (3.12.1)
+    puma (4.0.1)
+      nio4r (~> 2.0)
     rack (2.0.7)
     rack-protection (2.0.5)
       rack
@@ -443,7 +444,7 @@ DEPENDENCIES
   omniauth-github
   omniauth-twitter
   pg (>= 0.18, < 2.0)
-  puma (~> 3.12.1)
+  puma
   rails (~> 5.2.2)
   rails-controller-testing
   rspec-rails (~> 3.8.2)
@@ -462,7 +463,7 @@ DEPENDENCIES
   turbolinks
   twitter-bootstrap-rails
   tzinfo-data
-  uglifier (>= 1.3.0)
+  uglifier
   web-console (>= 3.3.0)
   whenever
 
