@@ -71,6 +71,16 @@ Rails.application.configure do
   config.action_mailer.default_url_options = { :host => 'http://167.71.68.128' }
   config.action_mailer.perform_deliveries = true
 
+  ActionMailer::Base.smtp_settings = {
+      address: 'smtp.sendgrid.net',
+      port: 587,
+      domain: '167.71.68.128',
+      user_name: Rails.application.credentials[Rails.env.to_sym][:sendgrid][:username],
+      password: Rails.application.credentials[Rails.env.to_sym][:sendgrid][:password],
+      authentication: :login,
+      enable_starttls_auto: true
+  }
+
   # Ignore bad email addresses and do not raise email delivery errors.
   # Set this to true and configure the email server for immediate delivery to raise delivery errors.
   # config.action_mailer.raise_delivery_errors = false
