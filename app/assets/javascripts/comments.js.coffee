@@ -5,7 +5,7 @@ $(document).on 'ready turbolinks:load', ->
     commentId = $(this).data('commentId')
     $('form#edit-comment-' + commentId).removeClass 'hidden'
 
-ActionCable.createConsumer().subscriptions.create('CommentsChannel', {
+App.cable.subscriptions.create('CommentsChannel', {
   connected: ->
     questionId = gon.question_id
     if questionId

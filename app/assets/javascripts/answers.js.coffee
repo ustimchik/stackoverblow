@@ -5,7 +5,7 @@ $(document).on 'ready turbolinks:load', ->
     answerId = $(this).data('answerId')
     $('form#edit-answer-' + answerId).removeClass 'hidden'
 
-ActionCable.createConsumer().subscriptions.create('AnswersChannel', {
+App.cable.subscriptions.create('AnswersChannel', {
   connected: ->
     questionId = gon.question_id
     if questionId
