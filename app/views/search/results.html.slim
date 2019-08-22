@@ -9,7 +9,7 @@
       = link_to "Answer: #{result.body.truncate(80)}", result.question
       br
     - elsif result.instance_of?(Comment)
-      = link_to "Comment: #{result.body.truncate(80)}", result.commentable_type = "Question" ? question_path(result.commentable_id) : question_path(result.commentable.question)
+      = link_to "Comment: #{result.body.truncate(80)}", result.commentable_type == "Question" ? question_path(result.commentable_id) : question_path(result.commentable.question)
       br
     - elsif result.instance_of?(User)
       = link_to "User: #{result.email}", result
