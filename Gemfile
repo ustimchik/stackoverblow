@@ -62,6 +62,7 @@ gem 'thinking-sphinx'
 gem 'kaminari'
 gem 'ts-sidekiq-delta'
 gem 'unicorn'
+gem 'redis-rails'
 
 
 group :development, :test do

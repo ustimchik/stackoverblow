@@ -1,38 +1,39 @@
 br
-  .answer id = 'answer-#{answer.id}'
-    .container
-      .row
-        .col class="col-xs-1"
-          .votescore
-            p = "Votes: #{answer.votescore}"
-          - if can?(:update, answer) && can?(:destroy, answer)
-            = link_to 'Edit', '#', class: 'edit-answer-link btn btn-link', data: { answer_id: answer.id }
-            = link_to 'Delete', answer, remote: true, method: :delete, class: 'btn btn-link'
-          - else
-            - if can?(:upvote, answer)
-              = render partial: 'common/votebuttons', locals: {parent_obj: answer}
-          - if can?(:markbest, answer)
-            = link_to 'Mark Best', markbest_answer_path(answer), method: :post, remote: true, class: 'btn btn-link'
-        .col class="col-xs-8"
-          - if answer.persisted?
-            p= answer.body
-        .col class="col-xs-3"
+  - if answer.persisted?
+    - cache answer do
+      .answer id = 'answer-#{answer.id}'
+        .container
           .row
-            .col
-              = render partial: 'attachments/filelist', locals: {parent_obj: answer}
-            .col
-              = render partial: 'links/links', locals: {parent_obj: answer}
-      .row
-        .answer-errors
-          = render 'shared/errors', resource: answer
-      .row
-        = render 'answers/hiddenaform', answer: answer
-      .row
-        .col class="col-xs-1"
-        .col class="col-xs-8"
-          .comments
-            p Comments:
-            = render answer.comments
-            = render partial: 'comments/form', locals: {resource: answer}
-        .col class="col-xs-3"
+            .col class="col-xs-1"
+              .votescore
+                p = "Votes: #{answer.votescore}"
+              - if can?(:update, answer) && can?(:destroy, answer)
+                = link_to 'Edit', '#', class: 'edit-answer-link btn btn-link', data: { answer_id: answer.id }
+                = link_to 'Delete', answer, remote: true, method: :delete, class: 'btn btn-link'
+              - else
+                - if can?(:upvote, answer)
+                  = render partial: 'common/votebuttons', locals: {parent_obj: answer}
+              - if can?(:markbest, answer)
+                = link_to 'Mark Best', markbest_answer_path(answer), method: :post, remote: true, class: 'btn btn-link'
+            .col class="col-xs-8"
+              p= answer.body
+            .col class="col-xs-3"
+              .row
+                .col
+                  = render partial: 'attachments/filelist', locals: {parent_obj: answer}
+                .col
+                  = render partial: 'links/links', locals: {parent_obj: answer}
+          .row
+            .answer-errors
+              = render 'shared/errors', resource: answer
+          .row
+            = render 'answers/hiddenaform', answer: answer
+          .row
+            .col class="col-xs-1"
+            .col class="col-xs-8"
+              .comments
+                p Comments:
+                = render answer.comments
+                = render partial: 'comments/form', locals: {resource: answer}
+            .col class="col-xs-3"
 br

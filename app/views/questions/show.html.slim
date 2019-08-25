@@ -1,15 +1,16 @@
-.notice class="alert"
-.question
-  = render @question
-  = render 'hiddenqform'
+- cache @question do
+  .notice class="alert"
+  .question
+    = render @question
+    = render 'hiddenqform'
 
-.question-errors
-  = render 'shared/errors', resource: @question
+  .question-errors
+    = render 'shared/errors', resource: @question
 
-.answer-best
-  = render @question.answers.best
+  .answer-best
+    = render @question.answers.best
 
-.answers
-  = render @question.answers.not_best
-- if can?(:create, Answer)
-  = render 'answers/form'
+  .answers
+    = render @question.answers.not_best
+  - if can?(:create, Answer)
+    = render 'answers/form'
